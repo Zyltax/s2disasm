@@ -1,0 +1,30 @@
+; ===========================================================================
+; animation master script table for the tails
+; chooses which animation script to run depending on what Tails is doing
+; byte_1D29E:
+Obj05AniSelection:
+	dc.b	0,0	; TailsAni_Walk,Run	->
+	dc.b	3	; TailsAni_Roll		-> Directional
+	dc.b	3	; TailsAni_Roll2	-> Directional
+	dc.b	9	; TailsAni_Push		-> Pushing
+	dc.b	1	; TailsAni_Wait		-> Swish
+	dc.b	0	; TailsAni_Balance	-> Blank
+	dc.b	2	; TailsAni_LookUp	-> Flick
+	dc.b	1	; TailsAni_Duck		-> Swish
+	dc.b	7	; TailsAni_Spindash	-> Spindash
+	dc.b	0,0,0	; TailsAni_Dummy1,2,3	->
+	dc.b	8	; TailsAni_Stop		-> Skidding
+	dc.b	0,0	; TailsAni_Float,2	->
+	dc.b	0	; TailsAni_Spring	->
+	dc.b	0	; TailsAni_Hang		->
+	dc.b	0,0	; TailsAni_Blink,2	->
+	dc.b	$A	; TailsAni_Hang2	-> Hanging
+	dc.b	0	; TailsAni_Bubble	->
+	dc.b	0,0,0,0	; TailsAni_Death,2,3,4	->
+	dc.b	0,0	; TailsAni_Hurt,Slide	->
+	dc.b	0	; TailsAni_Blank	->
+	dc.b	0,0	; TailsAni_Dummy4,5	->
+	dc.b	0	; TailsAni_HaulAss	->
+	dc.b	0	; TailsAni_Fly		->
+	even
+

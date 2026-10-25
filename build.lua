@@ -41,7 +41,7 @@ local function generate_music_data()
 		os.exit(false)
 	end
 
-	local compressed_song_list_filename = "sound/music/list of compressed songs.txt"
+	local compressed_song_list_filename = "Sound/Music/Compressed.tsv"
 
 	-- Detemine which songs are going to be compressed.
 	local compressed_songs = {}
@@ -54,13 +54,13 @@ local function generate_music_data()
 		music_buffer_address = music_buffer_address,
 		music_buffer_size = music_buffer_size,
 		compressed_song_list = common.clownmd5.HashFile(compressed_song_list_filename),
-		smps2asm = common.clownmd5.HashFile("sound/_smps2asm_inc.asm")
+		smps2asm = common.clownmd5.HashFile("Sound/SMPS2ASM Macros.asm")
 	}
 
-	for _, filename_stem in ipairs(common.get_directory_contents_changed("sound/music", ".asm", {".sax", ".inc"}, custom_hashes)) do
+	for _, filename_stem in ipairs(common.get_directory_contents_changed("Sound/Music", ".asm", {".sax", ".inc"}, custom_hashes)) do
 		local is_compressed = compressed_songs[filename_stem] == true
 
-		local inc_file_path = "sound/music/generated/" .. filename_stem .. ".inc"
+		local inc_file_path = "Sound/Music/Generated/" .. filename_stem .. ".inc"
 
 		-- Generate an '.inc' file for the song, which communicates to the assembler the song's file path as well as whether it is compressed or not.
 
@@ -70,13 +70,13 @@ local function generate_music_data()
 			include_file:write(string.format(
 [[
 .is_compressed = TRUE
-	binclude "sound/music/generated/%s.sax"
+	binclude "Sound/Music/Generated/%s.sax"
 ]], filename_stem))
 		else
 			include_file:write(string.format(
 [[
 .is_compressed = FALSE
-	include "sound/music/%s.asm"
+	include "Sound/Music/%s.asm"
 ]], filename_stem))
 		end
 
@@ -84,8 +84,8 @@ local function generate_music_data()
 
 		-- If the song is compressed then compress it!
 		if is_compressed then
-			local asm_file_path = "sound/music/" .. filename_stem .. ".asm"
-			local sax_file_path = "sound/music/generated/" .. filename_stem .. ".sax"
+			local asm_file_path = "Sound/Music/" .. filename_stem .. ".asm"
+			local sax_file_path = "Sound/Music/Generated/" .. filename_stem .. ".sax"
 
 			print("Reassembling song '" .. filename_stem .. ".asm'...")
 
@@ -104,10 +104,10 @@ z80_ptr function x,(x)<<8&$FF00|(x)>>8&$00FF
 
 FixMusicAndSFXDataBugs = 0
 SonicDriverVer = 2
-	include "sound/_smps2asm_inc.asm"
+	include "Sound/SMPS2ASM Macros.asm"
 
 	phase $%X
-	include "sound/music/%s.asm"
+	include "Sound/Music/%s.asm"
 	dephase
 
 	if *>$%X
@@ -139,7 +139,7 @@ local function amend_sound_driver_size()
 	-- Correct the compressed sound driver size, which we couldn't do until p2bin had been ran.
 	local comp_z80_size, movewZ80CompSize
 
-	for line in io.lines("s2.h") do
+	for line in io.lines("sonic2.h") do
 		local match_begin, match_end = string.find(line, "comp_z80_size")
 
 		if match_begin ~= nil then
@@ -163,7 +163,7 @@ local function amend_sound_driver_size()
 	end
 
 	-- Remove the header file, since we no longer need it.
-	os.remove("s2.h")
+	os.remove("sonic2.h")
 end
 
 ----------------------
@@ -178,12 +178,12 @@ end
 generate_music_data()
 
 -- Produce PCM and DPCM data.
-common.convert_pcm_files_in_directory("sound/PCM")
-common.convert_dpcm_files_in_directory("sound/DAC")
+common.convert_pcm_files_in_directory("Sound/DAC/PCM")
+common.convert_dpcm_files_in_directory("Sound/DAC/DPCM")
 
 -- Build the ROM.
 local compression = improved_sound_driver_compression and "saxman-optimised" or "saxman-bugged"
-common.build_rom_and_handle_failure("s2", "s2built", "", "-p=0 -z=0," .. compression .. ",Size_of_Snd_driver_guess,after", true, repository)
+common.build_rom_and_handle_failure("sonic2", "s2built", "-gnuerrors", "-p=0 -z=0," .. compression .. ",Size_of_Snd_driver_guess,after", true, repository)
 
 -- Patch the ROM with the correct sound driver size.
 amend_sound_driver_size()

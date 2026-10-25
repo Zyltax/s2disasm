@@ -1,30 +1,30 @@
-SonLVL INI Files/dllcache
-SonLVL INI Files/SonLVL.log
+Utility Project Files/SonLVL INI Files/dllcache
+Utility Project Files/SonLVL INI Files/SonLVL.log
 *~
 
 # Misc. compiler output.
-s2.h
-s2.p
-s2.lst
-s2.log
-s2.map
+sonic2.h
+sonic2.p
+sonic2.lst
+sonic2.log
+sonic2.map
 
 # Built ROMs.
 s2built.bin
 s2built.prev.bin
 
 # Automatically-generated music data.
-sound/music/generated/*.inc
-sound/music/generated/*.sax
-sound/music/generated/hashes.lua
+Sound/Music/Generated/*.inc
+Sound/Music/Generated/*.sax
+Sound/Music/Generated/hashes.lua
 
 # Automatically-generated (D)PCM data.
-sound/DAC/generated/*.inc
-sound/DAC/generated/*.dpcm
-sound/DAC/generated/hashes.lua
-sound/PCM/generated/*.inc
-sound/PCM/generated/*.pcm
-sound/PCM/generated/hashes.lua
+Sound/DAC/Generated/*.inc
+Sound/DAC/Generated/*.dpcm
+Sound/DAC/Generated/hashes.lua
+Sound/PCM/Generated/*.inc
+Sound/PCM/Generated/*.pcm
+Sound/PCM/Generated/hashes.lua
 
 # Typical CMake build directory.
 build_tools/source_code/build
