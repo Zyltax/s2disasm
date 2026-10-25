@@ -19,12 +19,12 @@ Sound/Music/Generated/*.sax
 Sound/Music/Generated/hashes.lua
 
 # Automatically-generated (D)PCM data.
-Sound/DAC/Generated/*.inc
-Sound/DAC/Generated/*.dpcm
-Sound/DAC/Generated/hashes.lua
-Sound/PCM/Generated/*.inc
-Sound/PCM/Generated/*.pcm
-Sound/PCM/Generated/hashes.lua
+Sound/DAC/DPCM/Generated/*.inc
+Sound/DAC/DPCM/Generated/*.dpcm
+Sound/DAC/DPCM/Generated/hashes.lua
+Sound/DAC/PCM/Generated/*.inc
+Sound/DAC/PCM/Generated/*.pcm
+Sound/DAC/PCM/Generated/hashes.lua
 
 # Typical CMake build directory.
 build_tools/source_code/build
