@@ -1,7 +1,7 @@
 ; ----------------------------------------------------------------------------
 ; Primary sprite mappings for springs
 ; ----------------------------------------------------------------------------
-Obj41_MapUnc_1901C:	mappingsTable
+ObjSpring_MapUnc_1901C:	mappingsTable
 	mappingsTableEntry.w	word_19048
 	mappingsTableEntry.w	word_1905A
 	mappingsTableEntry.w	word_19064
@@ -17,7 +17,7 @@ Obj41_MapUnc_1901C:	mappingsTable
 ; Secondary sprite mappings for springs
 ; merged with the above mappings; can't split to file in a useful way...
 ; -------------------------------------------------------------------------------
-Obj41_MapUnc_19032:	mappingsTable
+ObjSpring_MapUnc_19032:	mappingsTable
 	mappingsTableEntry.w	word_19048
 	mappingsTableEntry.w	word_1905A
 	mappingsTableEntry.w	word_19064

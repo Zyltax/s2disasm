@@ -6,25 +6,25 @@
 ring_base_x_pos		= objoff_32	; x-position of primary ring (leftover from Sonic 1)
 
 ; Sprite_11F44: Obj_Ring:
-Obj25:
+ObjRing:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj25_Index(pc,d0.w),d1
-	jmp	Obj25_Index(pc,d1.w)
+	move.w	ObjRing_Index(pc,d0.w),d1
+	jmp	ObjRing_Index(pc,d1.w)
 ; ===========================================================================
 ; off_11F52: Obj_25_subtbl:
-Obj25_Index:	offsetTable
-		offsetTableEntry.w Obj25_Init		; 0
-		offsetTableEntry.w Obj25_Animate	; 2
-		offsetTableEntry.w Obj25_Collect	; 4
-		offsetTableEntry.w Obj25_Sparkle	; 6
-		offsetTableEntry.w Obj25_Delete		; 8
+ObjRing_Index:	offsetTable
+		offsetTableEntry.w ObjRing_Init		; 0
+		offsetTableEntry.w ObjRing_Animate	; 2
+		offsetTableEntry.w ObjRing_Collect	; 4
+		offsetTableEntry.w ObjRing_Sparkle	; 6
+		offsetTableEntry.w ObjRing_Delete		; 8
 ; ===========================================================================
 ; loc_11F5C: Obj_25_sub_0:
-Obj25_Init:
+ObjRing_Init:
 	addq.b	#2,routine(a0)
 	move.w	x_pos(a0),ring_base_x_pos(a0)
-	move.l	#Obj25_MapUnc_12382,mappings(a0)
+	move.l	#ObjRing_MapUnc_12382,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Ring,1,0),art_tile(a0)
 	bsr.w	Adjust2PArtPointer
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
@@ -32,25 +32,25 @@ Obj25_Init:
 	move.b	#$47,collision_flags(a0)
 	move.b	#8,width_pixels(a0)
 ; loc_11F90: Obj_25_sub_2:
-Obj25_Animate:
+ObjRing_Animate:
 	move.b	(Rings_anim_frame).w,mapping_frame(a0)
 	move.w	ring_base_x_pos(a0),d0
 	bra.w	MarkObjGone2
 ; ===========================================================================
 ; loc_11F9E: Obj_25_sub_4:
-Obj25_Collect:
+ObjRing_Collect:
 	addq.b	#2,routine(a0)
 	move.b	#0,collision_flags(a0)
 	move.b	#1,priority(a0)
 	bsr.s	CollectRing
 ; loc_11FB0: Obj_25_sub_6:
-Obj25_Sparkle:
+ObjRing_Sparkle:
 	lea	(Ani_Ring).l,a1
 	bsr.w	AnimateSprite
 	bra.w	DisplaySprite
 ; ===========================================================================
 ; loc_11FBE: BranchTo4_DeleteObject
-Obj25_Delete:
+ObjRing_Delete:
 	bra.w	DeleteObject
 
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
@@ -143,22 +143,22 @@ lostrings_timer		= objoff_1F	; time until ring is deleted
   endif
 
 ; Sprite_12078:
-Obj37:
+ObjLostRings:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj37_Index(pc,d0.w),d1
-	jmp	Obj37_Index(pc,d1.w)
+	move.w	ObjLostRings_Index(pc,d0.w),d1
+	jmp	ObjLostRings_Index(pc,d1.w)
 ; ===========================================================================
 ; off_12086: Obj_37_subtbl:
-Obj37_Index:	offsetTable
-		offsetTableEntry.w Obj37_Init		; 0
-		offsetTableEntry.w Obj37_Main		; 2
-		offsetTableEntry.w Obj37_Collect	; 4
-		offsetTableEntry.w Obj37_Sparkle	; 6
-		offsetTableEntry.w Obj37_Delete		; 8
+ObjLostRings_Index:	offsetTable
+		offsetTableEntry.w ObjLostRings_Init		; 0
+		offsetTableEntry.w ObjLostRings_Main		; 2
+		offsetTableEntry.w ObjLostRings_Collect	; 4
+		offsetTableEntry.w ObjLostRings_Sparkle	; 6
+		offsetTableEntry.w ObjLostRings_Delete		; 8
 ; ===========================================================================
 ; loc_12090: Obj_37_sub_0:
-Obj37_Init:
+ObjLostRings_Init:
 	movea.l	a0,a1
 	moveq	#0,d5
 	move.w	(Ring_count).w,d5	; use Sonic's rings counter
@@ -185,7 +185,7 @@ Obj37_Init:
 	move.b	#8,x_radius(a1)
 	move.w	x_pos(a0),x_pos(a1)
 	move.w	y_pos(a0),y_pos(a1)
-	move.l	#Obj25_MapUnc_12382,mappings(a1)
+	move.l	#ObjRing_MapUnc_12382,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_Ring,1,0),art_tile(a1)
 	bsr.w	Adjust2PArtPointer2
 	move.b	#1<<render_flags.on_screen|1<<render_flags.level_fg,render_flags(a1)
@@ -234,7 +234,7 @@ Obj37_Init:
 	move.w	#0,(Ring_count).w
 	move.b	#$80,(Update_HUD_rings).w
 	move.b	#0,(Extra_life_flags).w
-	bra.s	Obj37_Main
+	bra.s	ObjLostRings_Main
 ; ===========================================================================
 +
 	; reset Tails' ring counter
@@ -242,23 +242,23 @@ Obj37_Init:
 	move.b	#$80,(Update_HUD_rings_2P).w
 	move.b	#0,(Extra_life_flags_2P).w
 ; loc_12178: Obj_37_sub_2:
-Obj37_Main:
+ObjLostRings_Main:
 	move.b	(Ring_spill_anim_frame).w,mapping_frame(a0)
 	bsr.w	ObjectMove
 	addi.w	#$18,y_vel(a0)		; apply gravity
-	bmi.s	Obj37_CheckBoundary
+	bmi.s	ObjLostRings_CheckBoundary
 
 	; only checks floor collision every 8 frames
 	move.b	(Vint_runcount+3).w,d0
 	add.b	d7,d0
 	andi.b	#7,d0
-	bne.s	Obj37_CheckBoundary
+	bne.s	ObjLostRings_CheckBoundary
 
 	_btst	#render_flags.on_screen,render_flags(a0)
 	_beq.s	loc_121D0
 	jsr	(RingCheckFloorDist).l
 	tst.w	d1			; has the ring hit the floor?
-	bpl.s	Obj37_CheckBoundary	; if not, branch
+	bpl.s	ObjLostRings_CheckBoundary	; if not, branch
 	add.w	d1,y_pos(a0)		; align to floor
 	; reduce y-speed by 25% and bounce
 	move.w	y_vel(a0),d0
@@ -266,13 +266,13 @@ Obj37_Main:
 	sub.w	d0,y_vel(a0)
 	neg.w	y_vel(a0)
 ; loc_121B8:
-Obj37_CheckBoundary:
+ObjLostRings_CheckBoundary:
   if fixBugs
 	subq.b	#1,lostrings_timer(a0)		; has the timer finished?
-	beq.s	Obj37_Delete			; if yes, branch
+	beq.s	ObjLostRings_Delete			; if yes, branch
   else
 	tst.b	(Ring_spill_anim_counter).w	; has the animation finished?
-	beq.s	Obj37_Delete			; if yes, branch
+	beq.s	ObjLostRings_Delete			; if yes, branch
   endif
 	; The code below is programmed to automatically delete rings if they hit
 	; the bottom of the screen, however it does not take into account vertical
@@ -281,28 +281,28 @@ Obj37_CheckBoundary:
 	move.w	(Camera_Max_Y_pos).w,d0
 	addi.w	#screen_height,d0
 	cmp.w	y_pos(a0),d0			; has object moved below the level boundary?
-	blo.s	Obj37_Delete			; if yes, branch
+	blo.s	ObjLostRings_Delete			; if yes, branch
 	bra.w	DisplaySprite
 ; ===========================================================================
 
 loc_121D0:
 	tst.w	(Two_player_mode).w
-	bne.w	Obj37_Delete
-	bra.s	Obj37_CheckBoundary
+	bne.w	ObjLostRings_Delete
+	bra.s	ObjLostRings_CheckBoundary
 ; ===========================================================================
 ; loc_121DA: Obj_37_sub_4:
-Obj37_Collect:
+ObjLostRings_Collect:
 	addq.b	#2,routine(a0)
 	move.b	#0,collision_flags(a0)
 	move.b	#1,priority(a0)
 	bsr.w	CollectRing
 ; loc_121EE: Obj_37_sub_6:
-Obj37_Sparkle:
+ObjLostRings_Sparkle:
 	lea	(Ani_Ring).l,a1
 	bsr.w	AnimateSprite
 	bra.w	DisplaySprite
 ; ===========================================================================
 ; loc_121FC: BranchTo5_DeleteObject
-Obj37_Delete:
+ObjLostRings_Delete:
 	bra.w	DeleteObject
 

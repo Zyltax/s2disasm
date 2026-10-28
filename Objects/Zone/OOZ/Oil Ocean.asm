@@ -1,0 +1,103 @@
+; ===========================================================================
+; ---------------------------------------------------------------------------
+; Object 07 - Oil Ocean in OOZ
+; ---------------------------------------------------------------------------
+; OST Variables:
+oil_char1submersion	= objoff_38 ; $38(a0)
+oil_char2submersion	= objoff_3A ; $3A(a0)
+; ---------------------------------------------------------------------------
+; Sprite_24020:
+ObjOil:
+	moveq	#0,d0
+	move.b	routine(a0),d0
+	move.w	ObjOil_Index(pc,d0.w),d1
+	jmp	ObjOil_Index(pc,d1.w)
+; ===========================================================================
+; off_2402E: ObjOil_States:
+ObjOil_Index:	offsetTable
+		offsetTableEntry.w ObjOil_Init	; 0
+		offsetTableEntry.w ObjOil_Main	; 2
+; ===========================================================================
+; loc_24032:
+ObjOil_Init:
+	addq.b	#2,routine(a0) ; => ObjOil_Main
+	move.w	#$758,y_pos(a0)
+	move.b	#$20,width_pixels(a0)
+	move.w	y_pos(a0),objoff_30(a0)
+	move.b	#$30,oil_char1submersion(a0)
+	bset	#status.npc.no_balancing,status(a0)
+
+; loc_24054:
+ObjOil_Main:
+	; check player 1
+	tst.w	(Debug_placement_mode).w
+	bne.w	ObjOil_End
+	lea	(MainCharacter).w,a1 ; a1=character
+	moveq	#p1_standing,d1
+	move.b	status(a0),d0
+	and.b	d1,d0
+	bne.s	ObjOil_CheckKillChar1
+	cmpi.b	#$30,oil_char1submersion(a0)
+	beq.s	ObjOil_CheckSupportChar1
+	addq.b	#1,oil_char1submersion(a0)
+	bra.s	ObjOil_CheckSupportChar1
+; ---------------------------------------------------------------------------
+; loc_24078:
+ObjOil_CheckKillChar1:
+	tst.b	oil_char1submersion(a0)
+	beq.s	ObjOil_SuffocateCharacter
+	subq.b	#1,oil_char1submersion(a0)
+
+; loc_24082:
+ObjOil_CheckSupportChar1:
+	moveq	#$20,d1
+	moveq	#0,d3
+	move.b	oil_char1submersion(a0),d3
+	moveq	#p1_standing_bit,d6
+	move.w	x_pos(a1),d4
+	move.w	d4,x_pos(a0)
+	jsrto	JmpTo_PlatformObject_SingleCharacter ; stop the character from falling past the oil
+
+	; check player 2
+	lea	(Sidekick).w,a1 ; a1=character
+	moveq	#p2_standing,d1
+	move.b	status(a0),d0
+	and.b	d1,d0
+	bne.s	ObjOil_CheckKillChar2
+	cmpi.b	#$30,oil_char2submersion(a0)
+	beq.s	ObjOil_CheckSupportChar2
+	addq.b	#1,oil_char2submersion(a0)
+	bra.s	ObjOil_CheckSupportChar2
+; ---------------------------------------------------------------------------
+; loc_240B4:
+ObjOil_CheckKillChar2:
+	tst.b	oil_char2submersion(a0)
+	beq.s	ObjOil_SuffocateCharacter
+	subq.b	#1,oil_char2submersion(a0)
+
+; loc_240BE:
+ObjOil_CheckSupportChar2:
+	moveq	#$20,d1
+	moveq	#0,d3
+	move.b	oil_char2submersion(a0),d3
+	moveq	#p2_standing_bit,d6
+	move.w	x_pos(a1),d4
+	move.w	d4,x_pos(a0)
+	jsrto	JmpTo_PlatformObject_SingleCharacter ; stop the character from falling past the oil
+
+	rts
+; ---------------------------------------------------------------------------
+; loc_240D6:
+ObjOil_SuffocateCharacter:
+	not.b	d1
+	and.b	d1,status(a0)
+	move.l	a0,-(sp)
+	movea.l	a0,a2
+	movea.l	a1,a0
+	jsrto	JmpTo3_KillCharacter
+	movea.l	(sp)+,a0 ; load 0bj address
+
+ObjOil_End:
+	rts
+; ===========================================================================
+

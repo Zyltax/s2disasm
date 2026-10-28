@@ -1,0 +1,22 @@
+Animal_PLCTable: zoneOrderedTable 1,1
+	zoneTableEntry.b PLCID_EhzAnimals	; EHZ
+	zoneTableEntry.b PLCID_EhzAnimals	; Zone 1
+	zoneTableEntry.b PLCID_EhzAnimals	; WZ
+	zoneTableEntry.b PLCID_EhzAnimals	; Zone 3
+	zoneTableEntry.b PLCID_MtzAnimals	; MTZ1,2
+	zoneTableEntry.b PLCID_MtzAnimals	; MTZ3
+	zoneTableEntry.b PLCID_WfzAnimals	; WFZ
+	zoneTableEntry.b PLCID_HtzAnimals	; HTZ
+	zoneTableEntry.b PLCID_HpzAnimals	; HPZ
+	zoneTableEntry.b PLCID_HpzAnimals	; Zone 9
+	zoneTableEntry.b PLCID_OozAnimals	; OOZ
+	zoneTableEntry.b PLCID_MczAnimals	; MCZ
+	zoneTableEntry.b PLCID_CnzAnimals	; CNZ
+	zoneTableEntry.b PLCID_CpzAnimals	; CPZ
+	zoneTableEntry.b PLCID_DezAnimals	; DEZ
+	zoneTableEntry.b PLCID_ArzAnimals	; ARZ
+	zoneTableEntry.b PLCID_SczAnimals	; SCZ
+    zoneTableEnd
+
+	dc.b PLCID_SczAnimals	; level slot $11 (non-existent), not part of main table
+	even

@@ -3,21 +3,21 @@
 ; Object 44 - Round bumper from Casino Night Zone
 ; ----------------------------------------------------------------------------
 ; Sprite_1F730:
-Obj44:
+ObjRoundBumper:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj44_Index(pc,d0.w),d1
-	jmp	Obj44_Index(pc,d1.w)
+	move.w	ObjRoundBumper_Index(pc,d0.w),d1
+	jmp	ObjRoundBumper_Index(pc,d1.w)
 ; ===========================================================================
-; off_1F73E: Obj44_States:
-Obj44_Index:	offsetTable
-		offsetTableEntry.w Obj44_Init	; 0
-		offsetTableEntry.w Obj44_Main	; 2
+; off_1F73E: ObjRoundBumper_States:
+ObjRoundBumper_Index:	offsetTable
+		offsetTableEntry.w ObjRoundBumper_Init	; 0
+		offsetTableEntry.w ObjRoundBumper_Main	; 2
 ; ===========================================================================
 ; loc_1F742:
-Obj44_Init:
-	addq.b	#2,routine(a0) ; => Obj44_Main
-	move.l	#Obj44_MapUnc_1F85A,mappings(a0)
+ObjRoundBumper_Init:
+	addq.b	#2,routine(a0) ; => ObjRoundBumper_Main
+	move.l	#ObjRoundBumper_MapUnc_1F85A,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZRoundBumper,2,0),art_tile(a0)
 	jsrto	JmpTo5_Adjust2PArtPointer
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
@@ -26,24 +26,24 @@ Obj44_Init:
 	move.b	#$D7,collision_flags(a0)
 
 ; loc_1F770:
-Obj44_Main:
+ObjRoundBumper_Main:
 	move.b	collision_property(a0),d0
 	beq.w	loc_1F83E
 	lea	(MainCharacter).w,a1 ; a1=character
 	bclr	#0,collision_property(a0)
 	beq.s	+
-	bsr.s	Obj44_BumpCharacter
+	bsr.s	ObjRoundBumper_BumpCharacter
 +
 	lea	(Sidekick).w,a1 ; a1=character
 	bclr	#1,collision_property(a0)
 	beq.s	+
-	bsr.s	Obj44_BumpCharacter
+	bsr.s	ObjRoundBumper_BumpCharacter
 +
 	clr.b	collision_property(a0)
 	bra.w	loc_1F83E
 ; ===========================================================================
 ; loc_1F79C:
-Obj44_BumpCharacter:
+ObjRoundBumper_BumpCharacter:
 	move.w	x_pos(a0),d1
 	move.w	y_pos(a0),d2
 	sub.w	x_pos(a1),d1
@@ -105,6 +105,6 @@ byte_1F853:	dc.b   3,  1,  0,  1,$FD,  0
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj44_MapUnc_1F85A:	include "mappings/sprite/obj44.asm"
+ObjRoundBumper_MapUnc_1F85A:	include "mappings/sprite/obj44.asm"
 ; ===========================================================================
 

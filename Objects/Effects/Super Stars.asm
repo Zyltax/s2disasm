@@ -3,31 +3,31 @@
 ; Object 7E - Super Sonic's stars
 ; ----------------------------------------------------------------------------
 ; Sprite_1E0F0:
-Obj7E:
+ObjSuperSonicStars:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj7E_Index(pc,d0.w),d1
-	jmp	Obj7E_Index(pc,d1.w)
+	move.w	ObjSuperSonicStars_Index(pc,d0.w),d1
+	jmp	ObjSuperSonicStars_Index(pc,d1.w)
 ; ===========================================================================
-; off_1E0FE: Obj7E_States:
-Obj7E_Index:	offsetTable
-		offsetTableEntry.w Obj7E_Init	; 0
-		offsetTableEntry.w Obj7E_Main	; 2
+; off_1E0FE: ObjSuperSonicStars_States:
+ObjSuperSonicStars_Index:	offsetTable
+		offsetTableEntry.w ObjSuperSonicStars_Init	; 0
+		offsetTableEntry.w ObjSuperSonicStars_Main	; 2
 ; ===========================================================================
 ; loc_1E102:
-Obj7E_Init:
+ObjSuperSonicStars_Init:
 	addq.b	#2,routine(a0)
-	move.l	#Obj7E_MapUnc_1E1BE,mappings(a0)
+	move.l	#ObjSuperSonicStars_MapUnc_1E1BE,mappings(a0)
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#1,priority(a0)
 	move.b	#$18,width_pixels(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_SuperSonic_stars,0,0),art_tile(a0)
 	bsr.w	Adjust2PArtPointer
 	btst	#high_priority_bit,(MainCharacter+art_tile).w
-	beq.s	Obj7E_Main
+	beq.s	ObjSuperSonicStars_Main
 	bset	#high_priority_bit,art_tile(a0)
 ; loc_1E138:
-Obj7E_Main:
+ObjSuperSonicStars_Main:
 	tst.b	(Super_Sonic_flag).w
 	beq.s	JmpTo8_DeleteObject
 	tst.b	objoff_30(a0)
@@ -79,5 +79,5 @@ JmpTo8_DeleteObject ; JmpTo
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj7E_MapUnc_1E1BE:	include "mappings/sprite/obj7E.asm"
+ObjSuperSonicStars_MapUnc_1E1BE:	include "mappings/sprite/obj7E.asm"
 ; ===========================================================================

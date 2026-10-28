@@ -14,33 +14,33 @@ obj0a_next_bubble_timer             = objoff_3A
 ;obj0a_character                    = objoff_3C
 
 ; Sprite_1D320:
-Obj0A:
+ObjSmallBubbles:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj0A_Index(pc,d0.w),d1
-	jmp	Obj0A_Index(pc,d1.w)
+	move.w	ObjSmallBubbles_Index(pc,d0.w),d1
+	jmp	ObjSmallBubbles_Index(pc,d1.w)
 ; ===========================================================================
-; off_1D32E: Obj0A_States:
-Obj0A_Index:	offsetTable
-		offsetTableEntry.w Obj0A_Init		;   0
-		offsetTableEntry.w Obj0A_Animate	;   2
-		offsetTableEntry.w Obj0A_ChkWater	;   4
-		offsetTableEntry.w Obj0A_Display	;   6
+; off_1D32E: ObjSmallBubbles_States:
+ObjSmallBubbles_Index:	offsetTable
+		offsetTableEntry.w ObjSmallBubbles_Init		;   0
+		offsetTableEntry.w ObjSmallBubbles_Animate	;   2
+		offsetTableEntry.w ObjSmallBubbles_ChkWater	;   4
+		offsetTableEntry.w ObjSmallBubbles_Display	;   6
 		offsetTableEntry.w JmpTo5_DeleteObject	;   8
-		offsetTableEntry.w Obj0A_Countdown	;  $A
-		offsetTableEntry.w Obj0A_AirLeft	;  $C
-		offsetTableEntry.w Obj0A_DisplayNumber	;  $E
+		offsetTableEntry.w ObjSmallBubbles_Countdown	;  $A
+		offsetTableEntry.w ObjSmallBubbles_AirLeft	;  $C
+		offsetTableEntry.w ObjSmallBubbles_DisplayNumber	;  $E
 		offsetTableEntry.w JmpTo5_DeleteObject	; $10
 ; ===========================================================================
-; loc_1D340: Obj0A_Main:
-Obj0A_Init:
-	addq.b	#2,routine(a0) ; Obj0A_Animate
+; loc_1D340: ObjSmallBubbles_Main:
+ObjSmallBubbles_Init:
+	addq.b	#2,routine(a0) ; ObjSmallBubbles_Animate
 	; Use different mappings depending on which player the bubbles
 	; are coming from.
-	move.l	#Obj24_MapUnc_1FBF6,mappings(a0)
+	move.l	#ObjARZBubbles_MapUnc_1FBF6,mappings(a0)
 	tst.b	obj0a_character+3(a0)
 	beq.s	+
-	move.l	#Obj24_MapUnc_1FC18,mappings(a0)
+	move.l	#ObjARZBubbles_MapUnc_1FC18,mappings(a0)
 +
 	move.w	#make_art_tile(ArtTile_ArtNem_BigBubbles,0,1),art_tile(a0)
 	move.b	#1<<render_flags.on_screen|1<<render_flags.level_fg,render_flags(a0)
@@ -48,13 +48,13 @@ Obj0A_Init:
 	move.b	#1,priority(a0)
 	move.b	subtype(a0),d0
 	bpl.s	loc_1D388
-	addq.b	#8,routine(a0) ; Obj0A_Countdown
+	addq.b	#8,routine(a0) ; ObjSmallBubbles_Countdown
 	andi.w	#$7F,d0
 	; Yes, this is actually configurable, but it is normally only ever
 	; set to 2 seconds. The countdown starts at 12 seconds remaining, and
 	; the numbers count from 5 to 0, so 2 seconds is ideal.
 	move.b	d0,obj0a_seconds_between_numbers(a0)
-	bra.w	Obj0A_Countdown
+	bra.w	ObjSmallBubbles_Countdown
 ; ===========================================================================
 
 loc_1D388:
@@ -63,26 +63,26 @@ loc_1D388:
 	move.w	#-$88,y_vel(a0)
 
 ; loc_1D398:
-Obj0A_Animate:
+ObjSmallBubbles_Animate:
 	lea	(Ani_obj0A).l,a1
 	jsr	(AnimateSprite).l
 
 ; loc_1D3A4:
-Obj0A_ChkWater:
+ObjSmallBubbles_ChkWater:
 	move.w	(Water_Level_1).w,d0
 	cmp.w	y_pos(a0),d0		; has bubble reached the water surface?
-	blo.s	Obj0A_Wobble		; if not, branch
+	blo.s	ObjSmallBubbles_Wobble		; if not, branch
 	; pop the bubble:
-	move.b	#6,routine(a0) ; Obj0A_Display
+	move.b	#6,routine(a0) ; ObjSmallBubbles_Display
 	addq.b	#7,anim(a0)
 	cmpi.b	#$D,anim(a0)
-	beq.s	Obj0A_Display
-	blo.s	Obj0A_Display
+	beq.s	ObjSmallBubbles_Display
+	blo.s	ObjSmallBubbles_Display
 	move.b	#$D,anim(a0)
-	bra.s	Obj0A_Display
+	bra.s	ObjSmallBubbles_Display
 ; ===========================================================================
 ; loc_1D3CA:
-Obj0A_Wobble:
+ObjSmallBubbles_Wobble:
 	; If in a wind-tunnel, then make the bubbles move to the right.
 	tst.b	(WindTunnel_flag).w
 	beq.s	+
@@ -92,7 +92,7 @@ Obj0A_Wobble:
 	move.b	angle(a0),d0
 	addq.b	#1,angle(a0)
 	andi.w	#$7F,d0
-	lea	(Obj0A_WobbleData).l,a1
+	lea	(ObjSmallBubbles_WobbleData).l,a1
 	move.b	(a1,d0.w),d0
 	ext.w	d0
 	add.w	obj0a_original_x_pos(a0),d0
@@ -101,9 +101,9 @@ Obj0A_Wobble:
     if fixBugs
 	; This isn't actually a bugfix: it's just that a later bugfix pushes
 	; this call out of range, so it has to be extended to a word.
-	bsr.w	Obj0A_BecomeNumberMaybe
+	bsr.w	ObjSmallBubbles_BecomeNumberMaybe
     else
-	bsr.s	Obj0A_BecomeNumberMaybe
+	bsr.s	ObjSmallBubbles_BecomeNumberMaybe
     endif
 	jsr	(ObjectMove).l
 	_btst	#render_flags.on_screen,render_flags(a0)
@@ -115,21 +115,21 @@ JmpTo4_DeleteObject ; JmpTo
 	jmp	(DeleteObject).l
 ; ===========================================================================
 ; loc_1D40E:
-Obj0A_DisplayNumber:
+ObjSmallBubbles_DisplayNumber:
 	movea.l	obj0a_character(a0),a2 ; a2=character
 	cmpi.b	#12,air_left(a2)
 	bhi.s	JmpTo5_DeleteObject
 
 ; loc_1D41A:
-Obj0A_Display:
-	bsr.s	Obj0A_BecomeNumberMaybe
+ObjSmallBubbles_Display:
+	bsr.s	ObjSmallBubbles_BecomeNumberMaybe
 	lea	(Ani_obj0A).l,a1
 	jsr	(AnimateSprite).l
     if fixBugs
 	; If you stand in very shallow water and begin drowning, the
 	; countdown graphics will appear incorrectly. The cause is a missing
-	; call to 'Obj0A_LoadCountdownArt'.
-	bsr.w	Obj0A_LoadCountdownArt
+	; call to 'ObjSmallBubbles_LoadCountdownArt'.
+	bsr.w	ObjSmallBubbles_LoadCountdownArt
     endif
 	jmp	(DisplaySprite).l
 ; ===========================================================================
@@ -138,21 +138,21 @@ JmpTo5_DeleteObject ; JmpTo
 	jmp	(DeleteObject).l
 ; ===========================================================================
 ; loc_1D434:
-Obj0A_AirLeft:
+ObjSmallBubbles_AirLeft:
 	movea.l	obj0a_character(a0),a2 ; a2=character
 	cmpi.b	#12,air_left(a2)	; check air remaining
 	bhi.s	JmpTo6_DeleteObject	; if higher than $C, branch
 	subq.w	#1,obj0a_timer(a0)
-	bne.s	Obj0A_Display2
-	move.b	#$E,routine(a0) ; Obj0A_DisplayNumber
+	bne.s	ObjSmallBubbles_Display2
+	move.b	#$E,routine(a0) ; ObjSmallBubbles_DisplayNumber
 	addq.b	#7,anim(a0)
-	bra.s	Obj0A_Display
+	bra.s	ObjSmallBubbles_Display
 ; ===========================================================================
 ; loc_1D452:
-Obj0A_Display2:
+ObjSmallBubbles_Display2:
 	lea	(Ani_obj0A).l,a1
 	jsr	(AnimateSprite).l
-	bsr.w	Obj0A_LoadCountdownArt
+	bsr.w	ObjSmallBubbles_LoadCountdownArt
 	_btst	#render_flags.on_screen,render_flags(a0)
 	_beq.s	JmpTo6_DeleteObject
 	jmp	(DisplaySprite).l
@@ -161,8 +161,8 @@ Obj0A_Display2:
 JmpTo6_DeleteObject ; JmpTo
 	jmp	(DeleteObject).l
 ; ===========================================================================
-; loc_1D474: Obj0A_ShowNumber:
-Obj0A_BecomeNumberMaybe:
+; loc_1D474: ObjSmallBubbles_ShowNumber:
+ObjSmallBubbles_BecomeNumberMaybe:
 	tst.w	obj0a_timer(a0)
 	beq.s	return_1D4BE
 	subq.w	#1,obj0a_timer(a0)
@@ -185,13 +185,13 @@ Obj0A_BecomeNumberMaybe:
 	addi.w	#spriteScreenPositionY(0),d0
 	move.w	d0,y_pixel(a0)
 
-	move.b	#$C,routine(a0) ; Obj0A_AirLeft
+	move.b	#$C,routine(a0) ; ObjSmallBubbles_AirLeft
 
 return_1D4BE:
 	rts
 ; ===========================================================================
 ; byte_1D4C0:
-Obj0A_WobbleData:
+ObjSmallBubbles_WobbleData:
 	dc.b  0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2;16
 	dc.b  2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3;32
 	dc.b  3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 2;48
@@ -214,7 +214,7 @@ Obj0A_WobbleData:
 ; ===========================================================================
 ; the countdown numbers go over the dust and splash effect tiles in VRAM
 ; loc_1D5C0:
-Obj0A_LoadCountdownArt:
+ObjSmallBubbles_LoadCountdownArt:
 	moveq	#0,d1
 	move.b	mapping_frame(a0),d1
 	cmpi.b	#8,d1
@@ -243,13 +243,13 @@ return_1D604:
 ; ===========================================================================
 
 ; loc_1D606:
-Obj0A_Countdown:
+ObjSmallBubbles_Countdown:
 	movea.l	obj0a_character(a0),a2 ; a2=character
 
 	; If the player has drowned, and the object is waiting until the
 	; world should pause, then go deal with that.
 	tst.w	obj0a_time_until_freeze(a0)
-	bne.w	Obj0A_PlayerHasDrowned
+	bne.w	ObjSmallBubbles_PlayerHasDrowned
 
 	cmpi.b	#6,routine(a2) ; If player is dead, return.
 	bhs.w	return_1D81C
@@ -258,7 +258,7 @@ Obj0A_Countdown:
 
 	; Wait a second.
 	subq.w	#1,obj0a_timer(a0)
-	bpl.w	Obj0A_MakeBubbleMaybe
+	bpl.w	ObjSmallBubbles_MakeBubbleMaybe
 	move.w	#60-1,obj0a_timer(a0)
 
 	move.w	#1,obj0a_flags(a0)
@@ -271,13 +271,13 @@ Obj0A_Countdown:
 	moveq	#0,d0
 	move.b	air_left(a2),d0	; check air remaining
 	cmpi.w	#25,d0
-	beq.s	Obj0A_WarnSound	; play ding sound when there are 25 seconds left
+	beq.s	ObjSmallBubbles_WarnSound	; play ding sound when there are 25 seconds left
 	cmpi.w	#20,d0
-	beq.s	Obj0A_WarnSound	; play ding sound when there are 20 seconds left
+	beq.s	ObjSmallBubbles_WarnSound	; play ding sound when there are 20 seconds left
 	cmpi.w	#15,d0
-	beq.s	Obj0A_WarnSound	; play ding sound when there are 15 seconds left
+	beq.s	ObjSmallBubbles_WarnSound	; play ding sound when there are 15 seconds left
 	cmpi.w	#12,d0
-	bhi.s	Obj0A_ReduceAir	; play drowning theme when there are 12 seconds left
+	bhi.s	ObjSmallBubbles_ReduceAir	; play drowning theme when there are 12 seconds left
 	bne.s	+
 	; Play countdown music if this is player 1.
 	tst.b	obj0a_character+3(a0)
@@ -286,24 +286,24 @@ Obj0A_Countdown:
 	jsr	(PlayMusic).l
 +
 	subq.b	#1,obj0a_seconds_between_numbers_timer(a0)
-	bpl.s	Obj0A_ReduceAir
+	bpl.s	ObjSmallBubbles_ReduceAir
 	move.b	obj0a_seconds_between_numbers(a0),obj0a_seconds_between_numbers_timer(a0)
 	; Set the flag to create a number.
 	bset	#7,obj0a_flags(a0)
-	bra.s	Obj0A_ReduceAir
+	bra.s	ObjSmallBubbles_ReduceAir
 ; ===========================================================================
 ; loc_1D68C:
-Obj0A_WarnSound:
+ObjSmallBubbles_WarnSound:
 	; If this is player 1, then play the "ding-ding" warning sound.
 	tst.b	obj0a_character+3(a0)
-	bne.s	Obj0A_ReduceAir
+	bne.s	ObjSmallBubbles_ReduceAir
 	move.w	#SndID_WaterWarning,d0
 	jsr	(PlaySound).l
 
 ; loc_1D69C:
-Obj0A_ReduceAir:
+ObjSmallBubbles_ReduceAir:
 	subq.b	#1,air_left(a2)		; subtract 1 from air remaining
-	bcc.w	BranchTo_Obj0A_MakeBubbleNow	; if air is above 0, branch
+	bcc.w	BranchTo_ObjSmallBubbles_MakeBubbleNow	; if air is above 0, branch
 	; Drown the player.
 	move.b	#$81,obj_control(a2)	; lock controls
 	move.w	#SndID_Drown,d0
@@ -334,7 +334,7 @@ Obj0A_ReduceAir:
 	rts
 ; ===========================================================================
 ; loc_1D708:
-Obj0A_PlayerHasDrowned:
+ObjSmallBubbles_PlayerHasDrowned:
 	subq.w	#1,obj0a_time_until_freeze(a0)
 	bne.s	+
 	; Signal that the player is dead.
@@ -347,21 +347,21 @@ Obj0A_PlayerHasDrowned:
 	jsr	(ObjectMove).l
 	addi.w	#$10,y_vel(a0)
 	movea.l	(sp)+,a0 ; load 0bj address
-	bra.s	Obj0A_MakeBubbleMaybe
+	bra.s	ObjSmallBubbles_MakeBubbleMaybe
 ; ===========================================================================
-; BranchTo_Obj0A_MakeItem
-BranchTo_Obj0A_MakeBubbleNow ; BranchTo
-	bra.s	Obj0A_MakeBubbleNow
+; BranchTo_ObjSmallBubbles_MakeItem
+BranchTo_ObjSmallBubbles_MakeBubbleNow ; BranchTo
+	bra.s	ObjSmallBubbles_MakeBubbleNow
 ; ===========================================================================
 ;loc_1D72C:
-Obj0A_MakeBubbleMaybe:
+ObjSmallBubbles_MakeBubbleMaybe:
 	tst.w	obj0a_flags(a0)
 	beq.w	return_1D81C
 	subq.w	#1,obj0a_next_bubble_timer(a0)
 	bpl.w	return_1D81C
 
-; loc_1D73C: Obj0A_MakeItem:
-Obj0A_MakeBubbleNow:
+; loc_1D73C: ObjSmallBubbles_MakeItem:
+ObjSmallBubbles_MakeBubbleNow:
 	jsr	(RandomNumber).l
 	andi.w	#$F,d0
 	addq.w	#8,d0
@@ -383,7 +383,7 @@ Obj0A_MakeBubbleNow:
 	move.b	#6,subtype(a1)	; Small bubble?
 
 	tst.w	obj0a_time_until_freeze(a0)
-	beq.w	Obj0A_MakeNumberBubbleMaybe
+	beq.w	ObjSmallBubbles_MakeNumberBubbleMaybe
 
 	; The player has drowned.
 
@@ -400,23 +400,23 @@ Obj0A_MakeBubbleNow:
 
 	move.w	(Level_frame_counter).w,d0
 	andi.b	#3,d0
-	bne.s	Obj0A_DoneCreatingBubble
+	bne.s	ObjSmallBubbles_DoneCreatingBubble
 
 	move.b	#$E,subtype(a1)	; Big bubble?
-	bra.s	Obj0A_DoneCreatingBubble
+	bra.s	ObjSmallBubbles_DoneCreatingBubble
 ; ---------------------------------------------------------------------------
 ; loc_1D7C6:
-Obj0A_MakeNumberBubbleMaybe:
+ObjSmallBubbles_MakeNumberBubbleMaybe:
 	; The player has not drowned.
 
 	; If it's not time to create a number bubble, then skip this.
 	btst	#7,obj0a_flags(a0)
-	beq.s	Obj0A_DoneCreatingBubble
+	beq.s	ObjSmallBubbles_DoneCreatingBubble
 
 	moveq	#0,d2
 	move.b	air_left(a2),d2
 	cmpi.b	#12,d2
-	bhs.s	Obj0A_DoneCreatingBubble
+	bhs.s	ObjSmallBubbles_DoneCreatingBubble
 
 	; This player is about to drown.
 	lsr.w	#1,d2
@@ -424,18 +424,18 @@ Obj0A_MakeNumberBubbleMaybe:
 	andi.w	#3,d0
 	bne.s	+
 	bset	#6,obj0a_flags(a0) ; This flag prevents more than one number bubble from spawning at once.
-	bne.s	Obj0A_DoneCreatingBubble
+	bne.s	ObjSmallBubbles_DoneCreatingBubble
 	move.b	d2,subtype(a1)
 	move.w	#28,obj0a_timer(a1) ; Make this bubble turn into a number later.
 +
 	tst.b	obj0a_total_bubbles_to_spawn(a0)
-	bne.s	Obj0A_DoneCreatingBubble
+	bne.s	ObjSmallBubbles_DoneCreatingBubble
 	bset	#6,obj0a_flags(a0) ; This flag prevents more than one number bubble from spawning at once.
-	bne.s	Obj0A_DoneCreatingBubble
+	bne.s	ObjSmallBubbles_DoneCreatingBubble
 	move.b	d2,subtype(a1)
 	move.w	#28,obj0a_timer(a1) ; Make this bubble turn into a number later.
 ; loc_1D812:
-Obj0A_DoneCreatingBubble:
+ObjSmallBubbles_DoneCreatingBubble:
 	subq.b	#1,obj0a_total_bubbles_to_spawn(a0)
 	bpl.s	return_1D81C
 	; Don't spawn any more bubbles.

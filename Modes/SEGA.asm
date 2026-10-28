@@ -58,7 +58,7 @@ SegaScreen:
 	; load an extra sprite to hide the TM (trademark) symbol on the SEGA screen
 	lea	(SegaHideTM).w,a1
 	move.b	#ObjID_SegaHideTM,id(a1)	; load objB1 at $FFFFB080
-	move.b	#$4E,subtype(a1) ; <== ObjB1_SubObjData
+	move.b	#$4E,subtype(a1) ; <== ObjSegaHideTM_SubObjData
 ; loc_38CE:
 SegaScreen_Contin:
 	moveq	#PalID_SEGA,d0
@@ -69,7 +69,7 @@ SegaScreen_Contin:
 	move.w	#0,(SegaScr_PalDone_Flag).w
 	lea	(SegaScreenObject).w,a1
 	move.b	#ObjID_SonicOnSegaScr,id(a1) ; load objB0 (sega screen?) at $FFFFB040
-	move.b	#$4C,subtype(a1) ; <== ObjB0_SubObjData
+	move.b	#$4C,subtype(a1) ; <== ObjSonicOnSegaScr_SubObjData
 	move.w	#4*60,(Demo_Time_left).w	; 4 seconds
 	move.w	(VDP_Reg1_val).w,d0
 	ori.b	#$40,d0
@@ -83,7 +83,7 @@ Sega_WaitPalette:
 	tst.b	(SegaScr_PalDone_Flag).w
 	beq.s	Sega_WaitPalette
     if ~~fixBugs
-	; This is a leftover from Sonic 1: ObjB0 plays the Sega sound now.
+	; This is a leftover from Sonic 1: ObjSonicOnSegaScr plays the Sega sound now.
 	; Normally, you'll only hear one Sega sound, but the game actually
 	; tries to play it twice. The only reason it doesn't is because the
 	; sound queue only has room for one sound per frame. Some custom

@@ -8,23 +8,23 @@ planeswitch_p1_flag = 	objoff_34	; byte ; 0 if player 1 is above or left of swit
 planeswitch_p2_flag =	objoff_35	; byte ; same as above, but for player 2
 
 ; Sprite_1FCDC:
-Obj03:
+ObjPlaneSwitcher:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj03_Index(pc,d0.w),d1
-	jsr	Obj03_Index(pc,d1.w)
+	move.w	ObjPlaneSwitcher_Index(pc,d0.w),d1
+	jsr	ObjPlaneSwitcher_Index(pc,d1.w)
 	jmp	(MarkObjGone3).l
 ; ===========================================================================
 ; off_1FCF0:
-Obj03_Index:	offsetTable
-		offsetTableEntry.w Obj03_Init	; 0
-		offsetTableEntry.w Obj03_MainX	; 2
-		offsetTableEntry.w Obj03_MainY	; 4
+ObjPlaneSwitcher_Index:	offsetTable
+		offsetTableEntry.w ObjPlaneSwitcher_Init	; 0
+		offsetTableEntry.w ObjPlaneSwitcher_MainX	; 2
+		offsetTableEntry.w ObjPlaneSwitcher_MainY	; 4
 ; ===========================================================================
 ; loc_1FCF6:
-Obj03_Init:
-	addq.b	#2,routine(a0) ; => Obj03_MainX
-	move.l	#Obj03_MapUnc_1FFB8,mappings(a0)
+ObjPlaneSwitcher_Init:
+	addq.b	#2,routine(a0) ; => ObjPlaneSwitcher_MainX
+	move.l	#ObjPlaneSwitcher_MapUnc_1FFB8,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Ring,1,0),art_tile(a0)
 	jsrto	JmpTo7_Adjust2PArtPointer
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
@@ -32,9 +32,9 @@ Obj03_Init:
 	move.b	#5,priority(a0)
 	move.b	subtype(a0),d0
 	btst	#2,d0
-	beq.s	Obj03_Init_CheckX
-;Obj03_Init_CheckY:
-	addq.b	#2,routine(a0) ; => Obj03_MainY
+	beq.s	ObjPlaneSwitcher_Init_CheckX
+;ObjPlaneSwitcher_Init_CheckY:
+	addq.b	#2,routine(a0) ; => ObjPlaneSwitcher_MainY
 	andi.w	#7,d0
 	move.b	d0,mapping_frame(a0)
 	andi.w	#3,d0
@@ -51,7 +51,7 @@ Obj03_Init:
 	bhs.s	+
 	move.b	#1,planeswitch_p2_flag(a0)
 +
-	bra.w	Obj03_MainY
+	bra.w	ObjPlaneSwitcher_MainY
 ; ===========================================================================
 word_1FD68:
 	dc.w   $20
@@ -60,7 +60,7 @@ word_1FD68:
 	dc.w  $100	; 3
 ; ===========================================================================
 ; loc_1FD70:
-Obj03_Init_CheckX:
+ObjPlaneSwitcher_Init_CheckX:
 	andi.w	#3,d0
 	move.b	d0,mapping_frame(a0)
 	add.w	d0,d0
@@ -78,7 +78,7 @@ Obj03_Init_CheckX:
 +
 
 ; loc_1FDA4:
-Obj03_MainX:
+ObjPlaneSwitcher_MainX:
 	tst.w	(Debug_placement_mode).w
 	bne.w	return_1FEAC
 	move.w	x_pos(a0),d1
@@ -88,7 +88,7 @@ Obj03_MainX:
 	lea	(Sidekick).w,a1 ; a1=character
 
 +	tst.b	(a2)+
-	bne.s	Obj03_MainX_Alt
+	bne.s	ObjPlaneSwitcher_MainX_Alt
 	cmp.w	x_pos(a1),d1
 	bhi.w	return_1FEAC
 	move.b	#1,-1(a2)
@@ -123,7 +123,7 @@ Obj03_MainX:
 	bra.s	return_1FEAC
 ; ===========================================================================
 ; loc_1FE38:
-Obj03_MainX_Alt:
+ObjPlaneSwitcher_MainX_Alt:
 	cmp.w	x_pos(a1),d1
 	bls.w	return_1FEAC
 	move.b	#0,-1(a2)
@@ -160,7 +160,7 @@ return_1FEAC:
 	rts
 ; ===========================================================================
 
-Obj03_MainY:
+ObjPlaneSwitcher_MainY:
 	tst.w	(Debug_placement_mode).w
 	bne.w	return_1FFB6
 	move.w	y_pos(a0),d1
@@ -170,7 +170,7 @@ Obj03_MainY:
 	lea	(Sidekick).w,a1 ; a1=character
 
 +	tst.b	(a2)+
-	bne.s	Obj03_MainY_Alt
+	bne.s	ObjPlaneSwitcher_MainY_Alt
 	cmp.w	y_pos(a1),d1
 	bhi.w	return_1FFB6
 	move.b	#1,-1(a2)
@@ -205,7 +205,7 @@ Obj03_MainY:
 	bra.s	return_1FFB6
 ; ===========================================================================
 ; loc_1FF42:
-Obj03_MainY_Alt:
+ObjPlaneSwitcher_MainY_Alt:
 	cmp.w	y_pos(a1),d1
 	bls.w	return_1FFB6
 	move.b	#0,-1(a2)
@@ -244,7 +244,7 @@ return_1FFB6:
 ; ---------------------------------------------------------------------------
 ; sprite mappings
 ; ---------------------------------------------------------------------------
-Obj03_MapUnc_1FFB8:	include "mappings/sprite/obj03.asm"
+ObjPlaneSwitcher_MapUnc_1FFB8:	include "mappings/sprite/obj03.asm"
 ; ===========================================================================
 
 

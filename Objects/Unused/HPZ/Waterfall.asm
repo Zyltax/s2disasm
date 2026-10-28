@@ -3,29 +3,29 @@
 ; Object 13 - Waterfall in Hidden Palace Zone (unused)
 ; ----------------------------------------------------------------------------
 ; Sprite_203AC:
-Obj13:
+ObjHPZWaterfall:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj13_Index(pc,d0.w),d1
-	jmp	Obj13_Index(pc,d1.w)
+	move.w	ObjHPZWaterfall_Index(pc,d0.w),d1
+	jmp	ObjHPZWaterfall_Index(pc,d1.w)
 ; ===========================================================================
 ; off_203BA
-Obj13_Index:	offsetTable
-		offsetTableEntry.w Obj13_Init	; 0
-		offsetTableEntry.w Obj13_Main	; 2
-		offsetTableEntry.w Obj13_ChkDel	; 4
+ObjHPZWaterfall_Index:	offsetTable
+		offsetTableEntry.w ObjHPZWaterfall_Init	; 0
+		offsetTableEntry.w ObjHPZWaterfall_Main	; 2
+		offsetTableEntry.w ObjHPZWaterfall_ChkDel	; 4
 ; ===========================================================================
 ; loc_203C0:
-Obj13_Init:
+ObjHPZWaterfall_Init:
 	addq.b	#2,routine(a0)
-	move.l	#Obj13_MapUnc_20528,mappings(a0)
+	move.l	#ObjHPZWaterfall_MapUnc_20528,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_HPZ_Waterfall,3,1),art_tile(a0)
 	jsrto	JmpTo11_Adjust2PArtPointer
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
 	move.b	#1,priority(a0)
 	move.b	#$12,mapping_frame(a0)
-	bsr.s	Obj13_LoadSubObject
+	bsr.s	ObjHPZWaterfall_LoadSubObject
 	move.b	#$A0,y_radius(a1)
 	bset	#render_flags.explicit_height,render_flags(a1)
 	move.l	a1,objoff_38(a0)
@@ -33,21 +33,21 @@ Obj13_Init:
 	move.w	y_pos(a0),objoff_36(a0)
 	cmpi.b	#$10,subtype(a0)
 	blo.s	loc_2046C
-	bsr.s	Obj13_LoadSubObject
+	bsr.s	ObjHPZWaterfall_LoadSubObject
 	move.l	a1,objoff_3C(a0)
 	move.w	y_pos(a0),y_pos(a1)
 	addi.w	#$98,y_pos(a1)
 	bra.s	loc_2046C
 ; ===========================================================================
 ; loc_20428:
-Obj13_LoadSubObject:
+ObjHPZWaterfall_LoadSubObject:
 	jsr	(AllocateObjectAfterCurrent).l
 	bne.s	+	; rts
 	_move.b	#ObjID_HPZWaterfall,id(a1) ; load obj13
 	addq.b	#4,routine(a1)
 	move.w	x_pos(a0),x_pos(a1)
 	move.w	y_pos(a0),y_pos(a1)
-	move.l	#Obj13_MapUnc_20528,mappings(a1)
+	move.l	#ObjHPZWaterfall_MapUnc_20528,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_HPZ_Waterfall,3,1),art_tile(a1)
 	jsrto	JmpTo2_Adjust2PArtPointer2
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
@@ -66,7 +66,7 @@ loc_2046C:
 	move.w	d0,y_pos(a0)
 	move.w	d0,objoff_34(a0)
 ; loc_20486:
-Obj13_Main:
+ObjHPZWaterfall_Main:
 	movea.l	objoff_38(a0),a1 ; a1=object
 	move.b	#$12,mapping_frame(a0)
 	move.w	objoff_34(a0),d0
@@ -122,7 +122,7 @@ JmpTo17_DeleteObject ; JmpTo
     endif
 ; ===========================================================================
 ; loc_20510:
-Obj13_ChkDel:
+ObjHPZWaterfall_ChkDel:
 	move.w	x_pos(a0),d0
 	andi.w	#$FF80,d0
 	sub.w	(Camera_X_pos_coarse).w,d0
@@ -133,6 +133,6 @@ Obj13_ChkDel:
 ; -------------------------------------------------------------------------------
 ; sprite mappings (unused)
 ; -------------------------------------------------------------------------------
-Obj13_MapUnc_20528:	include "mappings/sprite/obj13.asm"
+ObjHPZWaterfall_MapUnc_20528:	include "mappings/sprite/obj13.asm"
 ; ===========================================================================
 

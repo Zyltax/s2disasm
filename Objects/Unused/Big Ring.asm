@@ -17,7 +17,7 @@ BigRing_States:	offsetTable
 ; ===========================================================================
 ; loc_12216:
 BigRing_Init:
-	move.l	#Obj37_MapUnc_123E6,mappings(a0)
+	move.l	#ObjLostRings_MapUnc_123E6,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_BigRing,1,0),art_tile(a0)
 	bsr.w	Adjust2PArtPointer
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
@@ -100,7 +100,7 @@ BigRingFlash_States: offsetTable
 ; loc_122D8:
 BigRingFlash_Init:
 	addq.b	#2,routine(a0)
-	move.l	#Obj37_MapUnc_124E6,mappings(a0)
+	move.l	#ObjLostRings_MapUnc_124E6,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_BigRing_Flash,1,0),art_tile(a0)
 	bsr.w	Adjust2PArtPointer
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
@@ -162,13 +162,13 @@ Ani_Ring:	offsetTable
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj25_MapUnc_12382:	include "mappings/sprite/obj37_a.asm"
+ObjRing_MapUnc_12382:	include "mappings/sprite/obj37_a.asm"
 ; -------------------------------------------------------------------------------
 ; Unused sprite mappings
 ; -------------------------------------------------------------------------------
-Obj37_MapUnc_123E6:	include "mappings/sprite/obj37_b.asm"
+ObjLostRings_MapUnc_123E6:	include "mappings/sprite/obj37_b.asm"
 ; -------------------------------------------------------------------------------
 ; Unused sprite mappings
 ; -------------------------------------------------------------------------------
-Obj37_MapUnc_124E6:	include "mappings/sprite/obj37_c.asm"
+ObjLostRings_MapUnc_124E6:	include "mappings/sprite/obj37_c.asm"
 

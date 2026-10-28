@@ -3,14 +3,14 @@
 ; Object 3E - Egg prison
 ; ----------------------------------------------------------------------------
 ; Sprite_3F1E4:
-Obj3E:
+ObjEggPrison:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj3E_Index(pc,d0.w),d1
-	jmp	Obj3E_Index(pc,d1.w)
+	move.w	ObjEggPrison_Index(pc,d0.w),d1
+	jmp	ObjEggPrison_Index(pc,d1.w)
 ; ===========================================================================
 ; off_3F1F2:
-Obj3E_Index:	offsetTable
+ObjEggPrison_Index:	offsetTable
 		offsetTableEntry.w loc_3F212	;  0
 		offsetTableEntry.w loc_3F278	;  2
 		offsetTableEntry.w loc_3F354	;  4
@@ -19,7 +19,7 @@ Obj3E_Index:	offsetTable
 		offsetTableEntry.w loc_3F406	; $A
 ; ----------------------------------------------------------------------------
 ; byte_3F1FE:
-Obj3E_ObjLoadData:
+ObjEggPrison_ObjLoadData:
 	dc.b   0,  2,$20,  4,  0
 	dc.b $28,  4,$10,  5,  4	; 5
 	dc.b $18,  6,  8,  3,  5	; 10
@@ -30,7 +30,7 @@ Obj3E_ObjLoadData:
 loc_3F212:
 	movea.l	a0,a1
 	lea	objoff_38(a0),a3
-	lea	Obj3E_ObjLoadData(pc),a2
+	lea	ObjEggPrison_ObjLoadData(pc),a2
 	moveq	#3,d1
 	bra.s	loc_3F228
 ; ===========================================================================
@@ -45,7 +45,7 @@ loc_3F228:
 	move.w	x_pos(a0),x_pos(a1)
 	move.w	y_pos(a0),y_pos(a1)
 	move.w	y_pos(a0),objoff_30(a1)
-	move.l	#Obj3E_MapUnc_3F436,mappings(a1)
+	move.l	#ObjEggPrison_MapUnc_3F436,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_Capsule,1,0),art_tile(a1)
 	move.b	#1<<render_flags.on_screen|1<<render_flags.level_fg,render_flags(a1)
 	moveq	#0,d0
@@ -226,6 +226,6 @@ byte_3F42F:	dc.b   3,  0,  1,  2,  3,$FE,  1
 ; their 'total sprite pieces' value set too low by one, causing the last
 ; sprite piece to not be displayed.
 ; ----------------------------------------------------------------------------
-Obj3E_MapUnc_3F436:	include "Objects/Global/Mappings/Prison Capsule.map"
+ObjEggPrison_MapUnc_3F436:	include "Objects/Global/Mappings/Prison Capsule.map"
 ; ===========================================================================
 

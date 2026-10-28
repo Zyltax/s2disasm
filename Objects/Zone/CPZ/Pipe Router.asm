@@ -3,15 +3,15 @@
 ; Object 0B - Section of pipe that tips you off from CPZ
 ; ----------------------------------------------------------------------------
 ; Sprite_2009C:
-Obj0B:
+ObjTippingFloor:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj0B_Index(pc,d0.w),d1
-	jmp	Obj0B_Index(pc,d1.w)
+	move.w	ObjTippingFloor_Index(pc,d0.w),d1
+	jmp	ObjTippingFloor_Index(pc,d1.w)
 ; ===========================================================================
 ; off_200AA:
-Obj0B_Index:	offsetTable
-		offsetTableEntry.w Obj0B_Init	; 0
+ObjTippingFloor_Index:	offsetTable
+		offsetTableEntry.w ObjTippingFloor_Init	; 0
 		offsetTableEntry.w loc_20104	; 2
 		offsetTableEntry.w loc_20112	; 4
 ; ===========================================================================
@@ -21,9 +21,9 @@ obj0B_duration_initial = objoff_32
 obj0B_delay = objoff_36
 
 ; loc_200B0:
-Obj0B_Init:
+ObjTippingFloor_Init:
 	addq.b	#2,routine(a0)
-	move.l	#Obj0B_MapUnc_201A0,mappings(a0)
+	move.l	#ObjTippingFloor_MapUnc_201A0,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CPZAnimatedBits,3,1),art_tile(a0)
 	jsrto	JmpTo8_Adjust2PArtPointer
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
@@ -104,6 +104,6 @@ byte_20198:
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj0B_MapUnc_201A0:	include "mappings/sprite/obj0B.asm"
+ObjTippingFloor_MapUnc_201A0:	include "mappings/sprite/obj0B.asm"
 ; ===========================================================================
 

@@ -318,3 +318,9 @@ btns_mask := btns_mask|button_start_mask
   endm
 	dc.b	btns_mask,duration-1
  endm
+
+; Macro for marking the boundaries of an object layout file
+ObjectLayoutBoundary macro
+	dc.w	$FFFF, $0000, $0000
+    endm
+

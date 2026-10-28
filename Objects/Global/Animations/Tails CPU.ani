@@ -2,7 +2,7 @@
 ; animation master script table for the tails
 ; chooses which animation script to run depending on what Tails is doing
 ; byte_1D29E:
-Obj05AniSelection:
+ObjTailsTailsAniSelection:
 	dc.b	0,0	; TailsAni_Walk,Run	->
 	dc.b	3	; TailsAni_Roll		-> Directional
 	dc.b	3	; TailsAni_Roll2	-> Directional

@@ -1,21 +1,21 @@
 ; Sprite_2FC50:
-Obj52:
+ObjHTZBoss:
 	moveq	#0,d0
 	move.b	boss_subtype(a0),d0
-	move.w	Obj52_Index(pc,d0.w),d1
-	jmp	Obj52_Index(pc,d1.w)
+	move.w	ObjHTZBoss_Index(pc,d0.w),d1
+	jmp	ObjHTZBoss_Index(pc,d1.w)
 ; ===========================================================================
 ; off_2FC5E:
-Obj52_Index:	offsetTable
-		offsetTableEntry.w Obj52_Init			; 0
-		offsetTableEntry.w Obj52_Mobile			; 2
-		offsetTableEntry.w Obj52_FlameThrower	; 4
-		offsetTableEntry.w Obj52_LavaBall		; 6
+ObjHTZBoss_Index:	offsetTable
+		offsetTableEntry.w ObjHTZBoss_Init			; 0
+		offsetTableEntry.w ObjHTZBoss_Mobile			; 2
+		offsetTableEntry.w ObjHTZBoss_FlameThrower	; 4
+		offsetTableEntry.w ObjHTZBoss_LavaBall		; 6
 		offsetTableEntry.w loc_30210			; 8
 ; ===========================================================================
 ; loc_2FC68:
-Obj52_Init:
-	move.l	#Obj52_MapUnc_302BC,mappings(a0)
+ObjHTZBoss_Init:
+	move.l	#ObjHTZBoss_MapUnc_302BC,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Eggpod_2,0,0),art_tile(a0)
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#$90,mainspr_width(a0)
@@ -57,22 +57,22 @@ loc_2FCEA:
 ; ===========================================================================
 
 ; loc_2FD00:
-Obj52_Mobile:
+ObjHTZBoss_Mobile:
 	moveq	#0,d0
 	move.b	boss_routine(a0),d0
 	move.w	off_2FD0E(pc,d0.w),d1
 	jmp	off_2FD0E(pc,d1.w)
 ; ===========================================================================
 off_2FD0E:	offsetTable
-		offsetTableEntry.w Obj52_Mobile_Raise			; 0
-		offsetTableEntry.w Obj52_Mobile_Flamethrower	; 2
-		offsetTableEntry.w Obj52_Mobile_BeginLower		; 4
-		offsetTableEntry.w Obj52_Mobile_Lower			; 6
-		offsetTableEntry.w Obj52_Mobile_Defeated				; 8
+		offsetTableEntry.w ObjHTZBoss_Mobile_Raise			; 0
+		offsetTableEntry.w ObjHTZBoss_Mobile_Flamethrower	; 2
+		offsetTableEntry.w ObjHTZBoss_Mobile_BeginLower		; 4
+		offsetTableEntry.w ObjHTZBoss_Mobile_Lower			; 6
+		offsetTableEntry.w ObjHTZBoss_Mobile_Defeated				; 8
 ; ===========================================================================
 
 ; loc_2FD18:
-Obj52_Mobile_Raise:
+ObjHTZBoss_Mobile_Raise:
 	move.b	#0,(Boss_CollisionRoutine).w
 	bsr.w	Boss_MoveObject
 	tst.b	boss_defeated(a0)
@@ -99,13 +99,13 @@ loc_2FD50:
 ; ===========================================================================
 
 ; loc_2FD5E:
-Obj52_Mobile_Flamethrower:
+ObjHTZBoss_Mobile_Flamethrower:
 	subi_.b	#1,objoff_3E(a0)
-	bpl.s	Obj52_Mobile_Hover
+	bpl.s	ObjHTZBoss_Mobile_Hover
 	move.b	#1,(Boss_CollisionRoutine).w
 	move.b	#1,mainspr_childsprites(a0)
 	cmpi.b	#-$18,objoff_3E(a0)
-	bne.s	Obj52_Mobile_Hover
+	bne.s	ObjHTZBoss_Mobile_Hover
 	jsrto	JmpTo13_AllocateObject
 	bne.s	loc_2FDAA
 	_move.b	#ObjID_HTZBoss,id(a1) ; load obj52
@@ -120,7 +120,7 @@ loc_2FDAA:
     if ~~fixBugs
 	; This branch is in the wrong place. Should the player defeat Eggman right as
 	; the flamethrower finishes, AnimateBoss will increment `boss_routine` by 2,
-	; making Obj52_Mobile read an invalid entry from off_2FD0E and crash the game.
+	; making ObjHTZBoss_Mobile read an invalid entry from off_2FD0E and crash the game.
 	bsr.w	loc_300A4
     endif
 	bsr.w	loc_2FEDE
@@ -134,7 +134,7 @@ loc_2FDAA:
 ; ===========================================================================
 
 ; loc_2FDC0:
-Obj52_Mobile_Hover:
+ObjHTZBoss_Mobile_Hover:
 	move.b	boss_sine_count(a0),d0
 	jsr	(CalcSine).l
 	asr.w	#7,d1
@@ -145,13 +145,13 @@ Obj52_Mobile_Hover:
 ; ===========================================================================
 
 ; loc_2FDDA:
-Obj52_Mobile_BeginLower:
+ObjHTZBoss_Mobile_BeginLower:
 	move.b	#0,(Boss_CollisionRoutine).w
 	move.b	#0,mainspr_childsprites(a0)
 	move.b	#$10,(Boss_AnimationArray+2).w
 	move.b	#0,(Boss_AnimationArray+3).w
 	subi_.b	#1,objoff_3E(a0)
-	bne.w	Obj52_Mobile_Hover
+	bne.w	ObjHTZBoss_Mobile_Hover
 	move.w	#$E0,(Boss_Y_vel).w
 	addq.b	#2,boss_routine(a0)
 	bsr.w	loc_2FEDE
@@ -159,13 +159,13 @@ Obj52_Mobile_BeginLower:
 ; ===========================================================================
 
 ; loc_2FE0E:
-Obj52_Mobile_Lower:
+ObjHTZBoss_Mobile_Lower:
 	bsr.w	Boss_MoveObject
 	tst.b	boss_defeated(a0)
 	bne.s	loc_2FE22
 	cmpi.w	#$538,(Boss_Y_pos).w
 	blt.s	loc_2FE58
-	bra.s	Obj52_CreateLavaBall
+	bra.s	ObjHTZBoss_CreateLavaBall
 ; ===========================================================================
 
 loc_2FE22:
@@ -173,7 +173,7 @@ loc_2FE22:
 	blt.s	loc_2FE58
 
 ; loc_2FE2A
-Obj52_CreateLavaBall:
+ObjHTZBoss_CreateLavaBall:
 	tst.b	objoff_38(a0)
 	bne.s	loc_2FE58
 	st.b	objoff_38(a0)
@@ -244,7 +244,7 @@ loc_2FEDE:
 ; ===========================================================================
 
 ; loc_2FEF0:
-Obj52_FlameThrower:
+ObjHTZBoss_FlameThrower:
 	moveq	#0,d0
 	move.b	routine_secondary(a0),d0
 	move.w	off_2FEFE(pc,d0.w),d1
@@ -256,7 +256,7 @@ off_2FEFE:	offsetTable
 ; ===========================================================================
 
 loc_2FF02:
-	move.l	#Obj52_MapUnc_302BC,mappings(a0)
+	move.l	#ObjHTZBoss_MapUnc_302BC,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_HTZBoss,0,0),art_tile(a0)
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#4,priority(a0)
@@ -286,7 +286,7 @@ loc_2FF50:
 ; ===========================================================================
 
 ; loc_2FF66:
-Obj52_LavaBall:
+ObjHTZBoss_LavaBall:
 	moveq	#0,d0
 	move.b	routine_secondary(a0),d0
 	move.w	off_2FF74(pc,d0.w),d1
@@ -313,7 +313,7 @@ loc_2FF80:
 loc_2FF94:
 	move.b	#ObjID_HTZBoss,id(a1) ; load obj52
 	move.b	#6,boss_subtype(a1)
-	move.l	#Obj52_MapUnc_302BC,mappings(a1)
+	move.l	#ObjHTZBoss_MapUnc_302BC,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_HTZBoss,0,0),art_tile(a1)
 	ori.b	#1<<render_flags.level_fg,render_flags(a1)
 	move.b	#3,priority(a1)
@@ -345,7 +345,7 @@ return_30006:
 ; ===========================================================================
 
 loc_30008:
-	bsr.w	Obj52_LavaBall_Move
+	bsr.w	ObjHTZBoss_LavaBall_Move
 	jsrto	JmpTo4_ObjCheckFloorDist
 	tst.w	d1
 	bpl.s	loc_30064
@@ -355,7 +355,7 @@ loc_30008:
 	move.b	#2,anim(a0)
 	move.b	#4,mapping_frame(a0)
 	move.w	#0,y_vel(a0)
-	move.l	#Obj20_MapUnc_23294,mappings(a0)
+	move.l	#ObjLavaBubble_MapUnc_23294,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_HtzFireball1,0,1),art_tile(a0)
 	jsrto	JmpTo62_Adjust2PArtPointer
 	move.b	#0,mapping_frame(a0)
@@ -363,7 +363,7 @@ loc_30008:
 	move.b	#3,objoff_36(a0)
 	move.b	#SndID_FireBurn,d0
 	jsrto	JmpTo7_PlaySound
-	jmpto	JmpTo_Obj20
+	jmpto	JmpTo_ObjLavaBubble
 ; ===========================================================================
 
 loc_30064:
@@ -373,7 +373,7 @@ loc_30064:
 ; ===========================================================================
 
 ; loc_30072:
-Obj52_LavaBall_Move:
+ObjHTZBoss_LavaBall_Move:
 	move.l	objoff_2A(a0),d2
 	move.l	y_pos(a0),d3
 	move.w	x_vel(a0),d0
@@ -395,7 +395,7 @@ loc_300A4:
 	cmpi.b	#8,boss_routine(a0)
 	bhs.s	return_300EA
 	tst.b	boss_hitcount2(a0)
-	beq.s	Obj52_Defeat
+	beq.s	ObjHTZBoss_Defeat
 	tst.b	collision_flags(a0)
 	bne.s	return_300EA
 	tst.b	boss_invulnerable_time(a0)
@@ -422,7 +422,7 @@ return_300EA:
 ; ===========================================================================
 
 ; loc_300EC:
-Obj52_Defeat:
+ObjHTZBoss_Defeat:
 	moveq	#100,d0
 	jsrto	JmpTo4_AddPoints
 	move.w	#$B3,(Boss_Countdown).w
@@ -433,23 +433,23 @@ Obj52_Defeat:
 ; ===========================================================================
 
 ; loc_30106:
-Obj52_Mobile_Defeated:
+ObjHTZBoss_Mobile_Defeated:
 	move.b	#0,mainspr_childsprites(a0)
 	subi_.w	#1,(Boss_Countdown).w
 	bmi.s	loc_30142
 	cmpi.w	#$1E,(Boss_Countdown).w
-	bgt.s	Obj52_Mobile_UpdateExplosion
+	bgt.s	ObjHTZBoss_Mobile_UpdateExplosion
 	move.b	#$10,mainspr_mapframe(a0)
 	bsr.w	Boss_LoadExplosion
 	move.b	(Vint_runcount+3).w,d0
 	andi.b	#$1F,d0
 	bne.w	JmpTo36_DisplaySprite
-	bsr.w	Obj52_CreateSmoke
+	bsr.w	ObjHTZBoss_CreateSmoke
 	jmpto	JmpTo36_DisplaySprite
 ; ===========================================================================
 
 ; loc_3013A:
-Obj52_Mobile_UpdateExplosion:
+ObjHTZBoss_Mobile_UpdateExplosion:
 	bsr.w	Boss_LoadExplosion
 	jmpto	JmpTo36_DisplaySprite
 ; ===========================================================================
@@ -457,11 +457,11 @@ Obj52_Mobile_UpdateExplosion:
 loc_30142:
 	move.b	(Vint_runcount+3).w,d0
 	andi.b	#$1F,d0
-	bne.w	Obj52_Mobile_Flee
-	bsr.w	Obj52_CreateSmoke
+	bne.w	ObjHTZBoss_Mobile_Flee
+	bsr.w	ObjHTZBoss_CreateSmoke
 
 ; loc_30152:
-Obj52_Mobile_Flee:
+ObjHTZBoss_Mobile_Flee:
 	cmpi.w	#-$3C,(Boss_Countdown).w
 	bgt.w	JmpTo36_DisplaySprite
 	tst.b	(Boss_defeated_flag).w
@@ -502,12 +502,12 @@ loc_301AA:
 ; ===========================================================================
 
 ; loc_301B4:
-Obj52_CreateSmoke
+ObjHTZBoss_CreateSmoke
 	jsrto	JmpTo13_AllocateObject
 	bne.s	return_3020E
 	move.b	#ObjID_HTZBoss,id(a1) ; load obj52
 	move.b	#8,boss_subtype(a1)
-	move.l	#Obj52_MapUnc_30258,mappings(a1)
+	move.l	#ObjHTZBoss_MapUnc_30258,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_BossSmoke_2,0,0),art_tile(a1)
 	ori.b	#1<<render_flags.level_fg,render_flags(a1)
 	move.b	#1,priority(a1)
@@ -558,7 +558,7 @@ JmpTo53_DeleteObject ; JmpTo
 ; ----------------------------------------------------------------------------
 ; sprite mappings - uses ArtNem_BossSmoke
 ; ----------------------------------------------------------------------------
-Obj52_MapUnc_30258:	include "mappings/sprite/obj52_a.asm"
+ObjHTZBoss_MapUnc_30258:	include "mappings/sprite/obj52_a.asm"
 
 ; animation script
 ; off_30288:
@@ -590,6 +590,6 @@ byte_302B7:	dc.b   3, $E, $F,$FF
 ; ----------------------------------------------------------------------------
 ; sprite mappings - uses ArtNem_Eggpod + ?
 ; ----------------------------------------------------------------------------
-Obj52_MapUnc_302BC:	include "mappings/sprite/obj52_b.asm"
+ObjHTZBoss_MapUnc_302BC:	include "mappings/sprite/obj52_b.asm"
 ; ===========================================================================
 

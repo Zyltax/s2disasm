@@ -6,26 +6,26 @@
 ; monitor collision and graphics.
 ; ---------------------------------------------------------------------------
 ; Sprite_12974: Obj_Monitor:
-Obj26:
+ObjMonitor:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj26_Index(pc,d0.w),d1
-	jmp	Obj26_Index(pc,d1.w)
+	move.w	ObjMonitor_Index(pc,d0.w),d1
+	jmp	ObjMonitor_Index(pc,d1.w)
 ; ===========================================================================
 ; off_12982: obj_26_subtbl:
-Obj26_Index:	offsetTable
-		offsetTableEntry.w Obj26_Init			; 0
-		offsetTableEntry.w Obj26_Main			; 2
-		offsetTableEntry.w Obj26_Break			; 4
-		offsetTableEntry.w Obj26_Animate		; 6
+ObjMonitor_Index:	offsetTable
+		offsetTableEntry.w ObjMonitor_Init			; 0
+		offsetTableEntry.w ObjMonitor_Main			; 2
+		offsetTableEntry.w ObjMonitor_Break			; 4
+		offsetTableEntry.w ObjMonitor_Animate		; 6
 		offsetTableEntry.w BranchTo2_MarkObjGone	; 8
 ; ===========================================================================
 ; loc_1298C: obj_26_sub_0: Obj_26_Init:
-Obj26_Init:
+ObjMonitor_Init:
 	addq.b	#2,routine(a0)
 	move.b	#$E,y_radius(a0)
 	move.b	#$E,x_radius(a0)
-	move.l	#Obj26_MapUnc_12D36,mappings(a0)
+	move.l	#ObjMonitor_MapUnc_12D36,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Powerups,0,0),art_tile(a0)
 	bsr.w	Adjust2PArtPointer
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
@@ -42,7 +42,7 @@ Obj26_Init:
 	; respawn entry, but this object fails to check for that before
 	; accessing the respawn table.
 	; Knuckles in Sonic 2 contains this half of the bugfix, but not the
-	; other half under 'Obj26_SpawnSmoke'.
+	; other half under 'ObjMonitor_SpawnSmoke'.
 	beq.s	+
     endif
 	bclr	#7,Obj_respawn_data-Object_Respawn_Table(a2,d0.w)
@@ -56,10 +56,10 @@ Obj26_Init:
 	move.b	#$46,collision_flags(a0)
 	move.b	subtype(a0),anim(a0)	; subtype = icon to display
 	tst.w	(Two_player_mode).w	; is it two player mode?
-	beq.s	Obj26_Main		; if not, branch
+	beq.s	ObjMonitor_Main		; if not, branch
 	move.b	#9,anim(a0)		; use '?' icon
 ; loc_12A00: obj_26_sub_2:
-Obj26_Main:
+ObjMonitor_Main:
 	move.b	routine_secondary(a0),d0
 	beq.s	SolidObject_Monitor
 	; only when secondary routine isn't 0
@@ -87,7 +87,7 @@ SolidObject_Monitor:
 	moveq	#p2_standing_bit,d6
 	bsr.w	SolidObject_Monitor_Tails
 ; loc_12A4E:
-Obj26_Animate:
+ObjMonitor_Animate:
 	lea	(Ani_obj26).l,a1
 	bsr.w	AnimateSprite
 
@@ -99,7 +99,7 @@ BranchTo2_MarkObjGone ; BranchTo
 ; sub_12756:
 SolidObject_Monitor_Sonic:
 	btst	d6,status(a0)			; is Sonic standing on the monitor?
-	bne.s	Obj26_ChkOverEdge		; if yes, branch
+	bne.s	ObjMonitor_ChkOverEdge		; if yes, branch
 	cmpi.b	#AniIDSonAni_Roll,anim(a1)		; is Sonic spinning?
 	bne.w	SolidObject_cont		; if not, branch
 	rts
@@ -111,7 +111,7 @@ SolidObject_Monitor_Sonic:
 ; sub_12768:
 SolidObject_Monitor_Tails:
 	btst	d6,status(a0)			; is Tails standing on the monitor?
-	bne.s	Obj26_ChkOverEdge		; if yes, branch
+	bne.s	ObjMonitor_ChkOverEdge		; if yes, branch
 	tst.w	(Two_player_mode).w		; is it two player mode?
 	beq.w	SolidObject_cont		; if not, branch
 	; in one player mode monitors always behave as solid for Tails
@@ -127,7 +127,7 @@ SolidObject_Monitor_Tails:
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
 
 ; loc_12782:
-Obj26_ChkOverEdge:
+ObjMonitor_ChkOverEdge:
 	move.w	d1,d2
 	add.w	d2,d2
 	btst	#status.player.in_air,status(a1)	; is the character in the air?
@@ -138,7 +138,7 @@ Obj26_ChkOverEdge:
 	add.w	d1,d0
 	bmi.s	+	; branch, if character is behind the left edge of the monitor
 	cmp.w	d2,d0
-	blo.s	Obj26_CharStandOn	; branch, if character is not beyond the right edge of the monitor
+	blo.s	ObjMonitor_CharStandOn	; branch, if character is not beyond the right edge of the monitor
 +
 	; if the character isn't standing on the monitor
 	bclr	#status.player.on_object,status(a1)	; clear 'on object' bit
@@ -148,17 +148,17 @@ Obj26_ChkOverEdge:
 	rts
 ; ---------------------------------------------------------------------------
 ; loc_127B2:
-Obj26_CharStandOn:
+ObjMonitor_CharStandOn:
 	move.w	d4,d2
 	bsr.w	MvSonicOnPtfm
 	moveq	#0,d4
 	rts
 ; ===========================================================================
 ; loc_12AC2: obj_26_sub_4:
-Obj26_Break:
+ObjMonitor_Break:
 	move.b	status(a0),d0
 	andi.b	#standing_mask|pushing_mask,d0	; is someone touching the monitor?
-	beq.s	Obj26_SpawnIcon	; if not, branch
+	beq.s	ObjMonitor_SpawnIcon	; if not, branch
 	move.b	d0,d1
 	andi.b	#p1_standing|p1_pushing,d1	; is it the main character?
 	beq.s	+		; if not, branch
@@ -166,23 +166,23 @@ Obj26_Break:
 	ori.b	#1<<status.player.in_air,(MainCharacter+status).w	; prevent Sonic from walking in the air
 +
 	andi.b	#p2_standing|p2_pushing,d0	; is it the sidekick?
-	beq.s	Obj26_SpawnIcon	; if not, branch
+	beq.s	ObjMonitor_SpawnIcon	; if not, branch
 	andi.b	#~(1<<status.player.on_object|1<<status.player.pushing),(Sidekick+status).w
 	ori.b	#1<<status.player.in_air,(Sidekick+status).w	; prevent Tails from walking in the air
 ; loc_127EC:
-Obj26_SpawnIcon:
+ObjMonitor_SpawnIcon:
 	clr.b	status(a0)
 	addq.b	#2,routine(a0)
 	move.b	#0,collision_flags(a0)
 	bsr.w	AllocateObject
-	bne.s	Obj26_SpawnSmoke
+	bne.s	ObjMonitor_SpawnSmoke
 	_move.b	#ObjID_MonitorContents,id(a1) ; load obj2E
 	move.w	x_pos(a0),x_pos(a1)	; set icon's position
 	move.w	y_pos(a0),y_pos(a1)
 	move.b	anim(a0),anim(a1)
 	move.w	parent(a0),parent(a1)	; parent gets the item
 ; loc_1281E:
-Obj26_SpawnSmoke:
+ObjMonitor_SpawnSmoke:
 	bsr.w	AllocateObject
 	bne.s	+
 	_move.b	#ObjID_Explosion,id(a1) ; load obj27
@@ -211,21 +211,21 @@ Obj26_SpawnSmoke:
 ; Object 2E - Monitor contents (code for power-up behavior and rising image)
 ; ---------------------------------------------------------------------------
 
-Obj2E:
+ObjMonitorContents:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj2E_Index(pc,d0.w),d1
-	jmp	Obj2E_Index(pc,d1.w)
+	move.w	ObjMonitorContents_Index(pc,d0.w),d1
+	jmp	ObjMonitorContents_Index(pc,d1.w)
 ; ===========================================================================
 ; off_12862:
-Obj2E_Index:	offsetTable
-		offsetTableEntry.w Obj2E_Init	; 0
-		offsetTableEntry.w Obj2E_Raise	; 2
-		offsetTableEntry.w Obj2E_Wait	; 4
+ObjMonitorContents_Index:	offsetTable
+		offsetTableEntry.w ObjMonitorContents_Init	; 0
+		offsetTableEntry.w ObjMonitorContents_Raise	; 2
+		offsetTableEntry.w ObjMonitorContents_Wait	; 4
 ; ===========================================================================
 ; Object initialization. Called if routine counter == 0.
 ; loc_12868:
-Obj2E_Init:
+ObjMonitorContents_Init:
 	addq.b	#2,routine(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Powerups,0,1),art_tile(a0)
 	bsr.w	Adjust2PArtPointer
@@ -259,13 +259,13 @@ Obj2E_Init:
 loc_128C6:			; Determine correct mappings offset.
 	addq.b	#1,d0
 	move.b	d0,mapping_frame(a0)
-	movea.l	#Obj26_MapUnc_12D36,a1
+	movea.l	#ObjMonitor_MapUnc_12D36,a1
 	add.b	d0,d0
 	adda.w	(a1,d0.w),a1
 	addq.w	#2,a1
 	move.l	a1,mappings(a0)
 ; loc_128DE:
-Obj2E_Raise:
+ObjMonitorContents_Raise:
 	bsr.s	+
 	bra.w	DisplaySprite
 
@@ -292,12 +292,12 @@ Obj2E_Raise:
 	moveq	#0,d0
 	move.b	anim(a0),d0
 	add.w	d0,d0
-	move.w	Obj2E_Types(pc,d0.w),d0
-	jmp	Obj2E_Types(pc,d0.w)
+	move.w	ObjMonitorContents_Types(pc,d0.w),d0
+	jmp	ObjMonitorContents_Types(pc,d0.w)
 ; End of function
 
 ; ===========================================================================
-Obj2E_Types:	offsetTable
+ObjMonitorContents_Types:	offsetTable
 		offsetTableEntry.w robotnik_monitor	; 0 - Static
 		offsetTableEntry.w sonic_1up		; 1 - Sonic 1-up
 		offsetTableEntry.w tails_1up		; 2 - Tails 1-up
@@ -440,12 +440,12 @@ shield_monitor:
 	jsr	(PlayMusic).l
 	tst.b	parent+1(a0)
 	bne.s	+
-	move.b	#ObjID_Shield,(Sonic_Shield+id).w ; load Obj38 (shield) at $FFFFD180
+	move.b	#ObjID_Shield,(Sonic_Shield+id).w ; load ObjShield (shield) at $FFFFD180
 	move.w	a1,(Sonic_Shield+parent).w
 	rts
 ; ---------------------------------------------------------------------------
 +	; give shield to sidekick
-	move.b	#ObjID_Shield,(Tails_Shield+id).w ; load Obj38 (shield) at $FFFFD1C0
+	move.b	#ObjID_Shield,(Tails_Shield+id).w ; load ObjShield (shield) at $FFFFD1C0
 	move.w	a1,(Tails_Shield+parent).w
 	rts
 ; ===========================================================================
@@ -468,12 +468,12 @@ invincible_monitor:
 +
 	tst.b	parent+1(a0)
 	bne.s	+
-	move.b	#ObjID_InvStars,(Sonic_InvincibilityStars+id).w ; load Obj35 (invincibility stars) at $FFFFD200
+	move.b	#ObjID_InvStars,(Sonic_InvincibilityStars+id).w ; load ObjInvStars (invincibility stars) at $FFFFD200
 	move.w	a1,(Sonic_InvincibilityStars+parent).w
 	rts
 ; ---------------------------------------------------------------------------
 +	; give invincibility to sidekick
-	move.b	#ObjID_InvStars,(Tails_InvincibilityStars+id).w ; load Obj35 (invincibility stars) at $FFFFD300
+	move.b	#ObjID_InvStars,(Tails_InvincibilityStars+id).w ; load ObjInvStars (invincibility stars) at $FFFFD300
 	move.w	a1,(Tails_InvincibilityStars+parent).w
 +
 	rts
@@ -580,9 +580,9 @@ swap_loop_objects:
 
 
 	lea	(MainCharacter).w,a1 ; a1=character
-	move.b	#ObjID_Shield,(Sonic_Shield+id).w ; load Obj38 (shield) at $FFFFD180
+	move.b	#ObjID_Shield,(Sonic_Shield+id).w ; load ObjShield (shield) at $FFFFD180
 	move.w	a1,(Sonic_Shield+parent).w
-	move.b	#ObjID_InvStars,(Sonic_InvincibilityStars+id).w ; load Obj35 (invincibility stars) at $FFFFD200
+	move.b	#ObjID_InvStars,(Sonic_InvincibilityStars+id).w ; load ObjInvStars (invincibility stars) at $FFFFD200
 	move.w	a1,(Sonic_InvincibilityStars+parent).w
 	btst	#status.player.rolling,status(a1)	; is Sonic spinning?
 	bne.s	+		; if yes, branch
@@ -605,9 +605,9 @@ swap_loop_objects:
 
 +
 	lea	(Sidekick).w,a1 ; a1=character
-	move.b	#ObjID_Shield,(Tails_Shield+id).w ; load Obj38 (shield) at $FFFFD1C0
+	move.b	#ObjID_Shield,(Tails_Shield+id).w ; load ObjShield (shield) at $FFFFD1C0
 	move.w	a1,(Tails_Shield+parent).w
-	move.b	#ObjID_InvStars,(Tails_InvincibilityStars+id).w ; load Obj35 (invincibility) at $FFFFD300
+	move.b	#ObjID_InvStars,(Tails_InvincibilityStars+id).w ; load ObjInvStars (invincibility) at $FFFFD300
 	move.w	a1,(Tails_InvincibilityStars+parent).w
 	btst	#status.player.rolling,status(a1)	; is Tails spinning?
 	bne.s	+		; if yes, branch
@@ -689,7 +689,7 @@ qmark_monitor:
 	move.b	#1,(Super_Sonic_flag).w
 	move.b	#$81,(MainCharacter+obj_control).w
 	move.b	#AniIDSupSonAni_Transform,(MainCharacter+anim).w	; use transformation animation
-	move.b	#ObjID_SuperSonicStars,(SuperSonicStars+id).w	; load Obj7E (Super Sonic stars object) at $FFFFD040
+	move.b	#ObjID_SuperSonicStars,(SuperSonicStars+id).w	; load ObjSuperSonicStars (Super Sonic stars object) at $FFFFD040
 	move.w	#$A00,(Sonic_top_speed).w
 	move.w	#$30,(Sonic_acceleration).w
 	move.w	#$100,(Sonic_deceleration).w
@@ -707,12 +707,12 @@ qmark_monitor:
 ; Holds icon in place for a while, then destroys it
 ; ---------------------------------------------------------------------------
 ;loc_12CC2:
-Obj2E_Wait:
+ObjMonitorContents_Wait:
 	subq.w	#1,anim_frame_duration(a0)
 	bmi.w	DeleteObject
 	bra.w	DisplaySprite
 ; ===========================================================================
 
 		include "Objects/Global/Animations/Monitor.ani"
-Obj26_MapUnc_12D36:	include "Objects/Global/Mappings/Monitor.map"
+ObjMonitor_MapUnc_12D36:	include "Objects/Global/Mappings/Monitor.map"
 

@@ -8,42 +8,42 @@ obj35_frames_addr = objoff_30
 obj35_other_layer_id = objoff_36
 
 ; Sprite_1D97E:
-Obj35:
+ObjInvStars:
 	moveq	#0,d0
 	move.b	objoff_A(a0),d0
-	move.w	Obj35_Index(pc,d0.w),d1
-	jmp	Obj35_Index(pc,d1.w)
+	move.w	ObjInvStars_Index(pc,d0.w),d1
+	jmp	ObjInvStars_Index(pc,d1.w)
 ; ===========================================================================
 ; off_1D98C:
-Obj35_Index:	offsetTable
-		offsetTableEntry.w Obj35_Main	; 0
-		offsetTableEntry.w Obj35_Layer0Update	; 2
-		offsetTableEntry.w Obj35_OtherLayersUpdate	; 4
+ObjInvStars_Index:	offsetTable
+		offsetTableEntry.w ObjInvStars_Main	; 0
+		offsetTableEntry.w ObjInvStars_Layer0Update	; 2
+		offsetTableEntry.w ObjInvStars_OtherLayersUpdate	; 4
 ; off_1D992:
-Obj35_Layers:
-	dc.l Obj35_Layer1Frames1
-	dc.b 0 ; offset for Obj35_PositionOffsetTable; here it's overwritten right before Obj35_Layer0Update
-	dc.b Obj35_Layer1Frames2-Obj35_Layer1Frames1
+ObjInvStars_Layers:
+	dc.l ObjInvStars_Layer1Frames1
+	dc.b 0 ; offset for ObjInvStars_PositionOffsetTable; here it's overwritten right before ObjInvStars_Layer0Update
+	dc.b ObjInvStars_Layer1Frames2-ObjInvStars_Layer1Frames1
 
-	dc.l Obj35_Layer2Frames1
+	dc.l ObjInvStars_Layer2Frames1
 	dc.b 22
-	dc.b Obj35_Layer2Frames2-Obj35_Layer2Frames1
+	dc.b ObjInvStars_Layer2Frames2-ObjInvStars_Layer2Frames1
 
-	dc.l Obj35_Layer3Frames1
+	dc.l ObjInvStars_Layer3Frames1
 	dc.b 44
-	dc.b Obj35_Layer3Frames2-Obj35_Layer3Frames1
+	dc.b ObjInvStars_Layer3Frames2-ObjInvStars_Layer3Frames1
 ; ===========================================================================
 ; loc_1D9A4:
-Obj35_Main:
+ObjInvStars_Main:
 	moveq	#0,d2
-	lea	Obj35_Layers-6(pc),a2
+	lea	ObjInvStars_Layers-6(pc),a2
 	lea	(a0),a1
 
 	moveq	#3,d1 ; 3 star layers
 
 -	_move.b	id(a0),id(a1) ; load obj35
-	move.b	#4,objoff_A(a1)		; => Obj35_OtherLayersUpdate
-	move.l	#Obj35_MapUnc_1DCBC,mappings(a1)
+	move.b	#4,objoff_A(a1)		; => ObjInvStars_OtherLayersUpdate
+	move.l	#ObjInvStars_MapUnc_1DCBC,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_Invincible_stars,0,0),art_tile(a1)
 	bsr.w	Adjust2PArtPointer2
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
@@ -58,11 +58,11 @@ Obj35_Main:
 	lea	next_object(a1),a1 ; a1=object
 	dbf	d1,-
 
-	move.b	#2,objoff_A(a0)		; => Obj35_Layer0Update
+	move.b	#2,objoff_A(a0)		; => ObjInvStars_Layer0Update
 	move.b	#4,obj35_table_offset(a0)
 
 ; loc_1DA0C:
-Obj35_Layer0Update:
+ObjInvStars_Layer0Update:
     if fixBugs
 	; If Sonic is invincible and he turns Super, then the invincibility
 	; stars will not go away. S3K fixes this by doing this:
@@ -77,7 +77,7 @@ Obj35_Layer0Update:
 	move.w	y_pos(a1),d1
 	move.w	d1,y_pos(a0)
 	lea	subspr_data(a0),a2
-	lea	Obj35_Layer0Frames(pc),a3
+	lea	ObjInvStars_Layer0Frames(pc),a3
 	moveq	#0,d5
 
 -	move.w	objoff_38(a0),d2
@@ -89,17 +89,17 @@ Obj35_Layer0Update:
 
 loc_1DA44:
 	addq.w	#1,objoff_38(a0)
-	lea	Obj35_PositionOffsetTable(pc),a6
+	lea	ObjInvStars_PositionOffsetTable(pc),a6
 	move.b	obj35_table_offset(a0),d6
 
-	jsr	Obj35_GetSpriteParams(pc)
+	jsr	ObjInvStars_GetSpriteParams(pc)
 	move.w	d2,(a2)+	; sub2_x_pos
 	move.w	d3,(a2)+	; sub2_y_pos
 	move.w	d5,(a2)+	; sub2_mapframe
 
 	addi.w	#16*2,d6	; add 16 positions (add 180 degrees to the angle)
 
-	jsr	Obj35_GetSpriteParams(pc)
+	jsr	ObjInvStars_GetSpriteParams(pc)
 	move.w	d2,(a2)+	; sub3_x_pos
 	move.w	d3,(a2)+	; sub3_y_pos
 	move.w	d5,(a2)+	; sub3_mapframe
@@ -114,7 +114,7 @@ loc_1DA44:
 	bra.w	DisplaySprite3
 ; ===========================================================================
 ; loc_1DA80:
-Obj35_OtherLayersUpdate:
+ObjInvStars_OtherLayersUpdate:
     if fixBugs
 	; If Sonic is invincible and he turns Super, then the invincibility
 	; stars will not go away. S3K fixes this by doing this:
@@ -161,10 +161,10 @@ loc_1DAE4:
 	add.b	objoff_35(a0),d2
 	move.b	(a3,d2.w),d5 ; load frame 2
 	addq.w	#1,objoff_38(a0)
-	lea	Obj35_PositionOffsetTable(pc),a6
+	lea	ObjInvStars_PositionOffsetTable(pc),a6
 	move.b	obj35_table_offset(a0),d6
 
-	jsr	Obj35_GetSpriteParams(pc)
+	jsr	ObjInvStars_GetSpriteParams(pc)
 	move.w	d2,(a2)+	; sub2_x_pos
 	move.w	d3,(a2)+	; sub2_y_pos
 	move.w	d5,(a2)+	; sub2_mapframe, use frame 2
@@ -172,7 +172,7 @@ loc_1DAE4:
 	addi.w	#16*2,d6	; add 16 positions (add 180 degrees to the angle)
 	swap	d5
 	
-	jsr	Obj35_GetSpriteParams(pc)
+	jsr	ObjInvStars_GetSpriteParams(pc)
 	move.w	d2,(a2)+	; sub3_x_pos
 	move.w	d3,(a2)+	; sub3_y_pos
 	move.w	d5,(a2)+	; sub3_mapframe, use frame 1
@@ -187,7 +187,7 @@ loc_1DAE4:
 	bra.w	DisplaySprite3
 ; ===========================================================================
 ; loc_1DB2C:
-Obj35_GetSpriteParams:
+ObjInvStars_GetSpriteParams:
 	andi.w	#$3E,d6	; 31*2, 64 bytes in the array (32 positions)
 	move.b	(a6,d6.w),d2	; read the X and Y position into d2 and d3 respectively
 	move.b	1(a6,d6.w),d3
@@ -198,7 +198,7 @@ Obj35_GetSpriteParams:
 	rts
 ; ===========================================================================
 ; byte_1DB42:
-Obj35_PositionOffsetTable:
+ObjInvStars_PositionOffsetTable:
 		;		X, Y
 		dc.b	15, 0	; 0 degrees
 		dc.b	15, 3
@@ -234,19 +234,19 @@ Obj35_PositionOffsetTable:
 		dc.b	15, -4
 
 ; byte_1DB82:
-Obj35_Layer0Frames:		dc.b   8,  5,  7,  6,  6,  7,  5,  8,  6,  7,  7,  6,$FF
+ObjInvStars_Layer0Frames:		dc.b   8,  5,  7,  6,  6,  7,  5,  8,  6,  7,  7,  6,$FF
 	rev02even
 ; byte_1DB8F:
-Obj35_Layer1Frames1:	dc.b   8,  7,  6,  5,  4,  3,  4,  5,  6,  7,$FF
-Obj35_Layer1Frames2:	dc.b   3,  4,  5,  6,  7,  8,  7,  6,  5,  4
+ObjInvStars_Layer1Frames1:	dc.b   8,  7,  6,  5,  4,  3,  4,  5,  6,  7,$FF
+ObjInvStars_Layer1Frames2:	dc.b   3,  4,  5,  6,  7,  8,  7,  6,  5,  4
 	rev02even
 ; byte_1DBA4:
-Obj35_Layer2Frames1:	dc.b   8,  7,  6,  5,  4,  3,  2,  3,  4,  5,  6,  7,$FF
-Obj35_Layer2Frames2:	dc.b   2,  3,  4,  5,  6,  7,  8,  7,  6,  5,  4,  3
+ObjInvStars_Layer2Frames1:	dc.b   8,  7,  6,  5,  4,  3,  2,  3,  4,  5,  6,  7,$FF
+ObjInvStars_Layer2Frames2:	dc.b   2,  3,  4,  5,  6,  7,  8,  7,  6,  5,  4,  3
 	rev02even
 ; byte_1DBBD:
-Obj35_Layer3Frames1:	dc.b   7,  6,  5,  4,  3,  2,  1,  2,  3,  4,  5,  6,$FF
-Obj35_Layer3Frames2:	dc.b   1,  2,  3,  4,  5,  6,  7,  6,  5,  4,  3,  2
+ObjInvStars_Layer3Frames1:	dc.b   7,  6,  5,  4,  3,  2,  1,  2,  3,  4,  5,  6,$FF
+ObjInvStars_Layer3Frames2:	dc.b   1,  2,  3,  4,  5,  6,  7,  6,  5,  4,  3,  2
 	even
 
 ; animation script
@@ -259,9 +259,9 @@ Ani_obj38:	offsetTable
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj38_MapUnc_1DBE4:	include "mappings/sprite/obj38.asm"
+ObjShield_MapUnc_1DBE4:	include "mappings/sprite/obj38.asm"
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj35_MapUnc_1DCBC:	include "mappings/sprite/obj35.asm"
+ObjInvStars_MapUnc_1DCBC:	include "mappings/sprite/obj35.asm"
 

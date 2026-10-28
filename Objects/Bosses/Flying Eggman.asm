@@ -1,20 +1,20 @@
 ; Sprite_32288:
-Obj54:
+ObjMTZBoss:
 	moveq	#0,d0
 	move.b	boss_subtype(a0),d0
-	move.w	Obj54_Index(pc,d0.w),d1
-	jmp	Obj54_Index(pc,d1.w)
+	move.w	ObjMTZBoss_Index(pc,d0.w),d1
+	jmp	ObjMTZBoss_Index(pc,d1.w)
 ; ===========================================================================
 ; off_32296:
-Obj54_Index:	offsetTable
-		offsetTableEntry.w Obj54_Init			; 0
-		offsetTableEntry.w Obj54_Main		 	; 2
-		offsetTableEntry.w Obj54_Laser			; 4
-		offsetTableEntry.w Obj54_LaserShooter	; 6
+ObjMTZBoss_Index:	offsetTable
+		offsetTableEntry.w ObjMTZBoss_Init			; 0
+		offsetTableEntry.w ObjMTZBoss_Main		 	; 2
+		offsetTableEntry.w ObjMTZBoss_Laser			; 4
+		offsetTableEntry.w ObjMTZBoss_LaserShooter	; 6
 ; ===========================================================================
 ; loc_3229E:
-Obj54_Init:
-	move.l	#Obj54_MapUnc_32DC6,mappings(a0)
+ObjMTZBoss_Init:
+	move.l	#ObjMTZBoss_MapUnc_32DC6,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_MTZBoss,0,0),art_tile(a0)
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
     if ~~fixBugs
@@ -25,7 +25,7 @@ Obj54_Init:
 	move.w	#$2B50,x_pos(a0)
 	move.w	#$380,y_pos(a0)
 	move.b	#2,mainspr_mapframe(a0)
-	addq.b	#2,boss_subtype(a0)		; => Obj54_Main
+	addq.b	#2,boss_subtype(a0)		; => ObjMTZBoss_Main
 	bset	#render_flags.multi_sprite,render_flags(a0)
 	move.b	#2,mainspr_childsprites(a0)
 	move.b	#$F,collision_flags(a0)
@@ -50,9 +50,9 @@ Obj54_Init:
 	jsrto	JmpTo17_AllocateObject
 	bne.s	+
 	move.b	#ObjID_MTZBoss,id(a1) ; load obj54
-	move.b	#6,boss_subtype(a1)		; => Obj54_LaserShooter
+	move.b	#6,boss_subtype(a1)		; => ObjMTZBoss_LaserShooter
 	move.b	#$13,mapping_frame(a1)
-	move.l	#Obj54_MapUnc_32DC6,mappings(a1)
+	move.l	#ObjMTZBoss_MapUnc_32DC6,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_MTZBoss,0,0),art_tile(a1)
 	ori.b	#1<<render_flags.level_fg,render_flags(a1)
 	move.b	#6,priority(a1)
@@ -75,31 +75,31 @@ Obj54_Init:
 	rts
 ; ===========================================================================
 ;loc_323BA
-Obj54_Main:
+ObjMTZBoss_Main:
 	moveq	#0,d0
 	move.b	boss_routine(a0),d0
-	move.w	Obj54_MainSubStates(pc,d0.w),d1
-	jmp	Obj54_MainSubStates(pc,d1.w)
+	move.w	ObjMTZBoss_MainSubStates(pc,d0.w),d1
+	jmp	ObjMTZBoss_MainSubStates(pc,d1.w)
 ; ===========================================================================
-Obj54_MainSubStates:	offsetTable
-		offsetTableEntry.w Obj54_MainSub0	;   0
-		offsetTableEntry.w Obj54_MainSub2	;   2
-		offsetTableEntry.w Obj54_MainSub4	;   4
-		offsetTableEntry.w Obj54_MainSub6	;   6
-		offsetTableEntry.w Obj54_MainSub8	;   8
-		offsetTableEntry.w Obj54_MainSubA	;  $A
-		offsetTableEntry.w Obj54_MainSubC	;  $C
-		offsetTableEntry.w Obj54_MainSubE	;  $E
-		offsetTableEntry.w Obj54_MainSub10	; $10
-		offsetTableEntry.w Obj54_MainSub12	; $12
+ObjMTZBoss_MainSubStates:	offsetTable
+		offsetTableEntry.w ObjMTZBoss_MainSub0	;   0
+		offsetTableEntry.w ObjMTZBoss_MainSub2	;   2
+		offsetTableEntry.w ObjMTZBoss_MainSub4	;   4
+		offsetTableEntry.w ObjMTZBoss_MainSub6	;   6
+		offsetTableEntry.w ObjMTZBoss_MainSub8	;   8
+		offsetTableEntry.w ObjMTZBoss_MainSubA	;  $A
+		offsetTableEntry.w ObjMTZBoss_MainSubC	;  $C
+		offsetTableEntry.w ObjMTZBoss_MainSubE	;  $E
+		offsetTableEntry.w ObjMTZBoss_MainSub10	; $10
+		offsetTableEntry.w ObjMTZBoss_MainSub12	; $12
 ; ===========================================================================
 ;loc_323DC
-Obj54_MainSub0:
+ObjMTZBoss_MainSub0:
 	bsr.w	Boss_MoveObject
 	move.w	(Boss_Y_pos).w,y_pos(a0)
 	cmpi.w	#$4A0,(Boss_Y_pos).w
 	blo.s	+
-	addq.b	#2,boss_routine(a0)		; => Obj54_MainSub2
+	addq.b	#2,boss_routine(a0)		; => ObjMTZBoss_MainSub2
 	move.w	#0,(Boss_Y_vel).w
 	move.w	#-$100,(Boss_X_vel).w
 	bclr	#7,objoff_2B(a0)
@@ -111,10 +111,10 @@ Obj54_MainSub0:
 	bset	#7,objoff_2B(a0)
 	bset	#render_flags.x_flip,render_flags(a0)
 +
-	bsr.w	Obj54_AnimateFace
+	bsr.w	ObjMTZBoss_AnimateFace
 	lea	(Ani_obj53).l,a1
 	bsr.w	AnimateBoss
-	bsr.w	Obj54_AlignSprites
+	bsr.w	ObjMTZBoss_AlignSprites
     if fixBugs
 	; Multi-sprite objects cannot use the 'priority' SST value, so they
 	; must use 'DisplaySprite3' instead of 'DisplaySprite'.
@@ -127,7 +127,7 @@ Obj54_MainSub0:
     endif
 ; ===========================================================================
 ;loc_3243C
-Obj54_Float:
+ObjMTZBoss_Float:
 	move.b	boss_sine_count(a0),d0
 	jsr	(CalcSine).l
 	asr.w	#6,d0
@@ -137,41 +137,41 @@ Obj54_Float:
 	rts
 ; ===========================================================================
 ;loc_32456
-Obj54_MainSub2:
+ObjMTZBoss_MainSub2:
 	bsr.w	Boss_MoveObject
 	btst	#7,objoff_2B(a0)
 	bne.s	+
 	cmpi.w	#$2AD0,(Boss_X_pos).w
-	bhs.s	Obj54_MoveAndShow
+	bhs.s	ObjMTZBoss_MoveAndShow
 	bchg	#7,objoff_2B(a0)
 	move.w	#$100,(Boss_X_vel).w
 	bset	#render_flags.x_flip,render_flags(a0)
 	bset	#6,objoff_2B(a0)
-	beq.s	Obj54_MoveAndShow
-	addq.b	#2,boss_routine(a0)		; => Obj54_MainSub4
+	beq.s	ObjMTZBoss_MoveAndShow
+	addq.b	#2,boss_routine(a0)		; => ObjMTZBoss_MainSub4
 	move.w	#-$100,(Boss_Y_vel).w
-	bra.s	Obj54_MoveAndShow
+	bra.s	ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 +
 	cmpi.w	#$2BD0,(Boss_X_pos).w
-	blo.s	Obj54_MoveAndShow
+	blo.s	ObjMTZBoss_MoveAndShow
 	bchg	#7,objoff_2B(a0)
 	move.w	#-$100,(Boss_X_vel).w
 	bclr	#render_flags.x_flip,render_flags(a0)
 	bset	#6,objoff_2B(a0)
-	beq.s	Obj54_MoveAndShow
-	addq.b	#2,boss_routine(a0)		; => Obj54_MainSub4
+	beq.s	ObjMTZBoss_MoveAndShow
+	addq.b	#2,boss_routine(a0)		; => ObjMTZBoss_MainSub4
 	move.w	#-$100,(Boss_Y_vel).w
 ;loc_324BC
-Obj54_MoveAndShow:
+ObjMTZBoss_MoveAndShow:
 	move.w	(Boss_X_pos).w,x_pos(a0)
-	bsr.w	Obj54_Float
+	bsr.w	ObjMTZBoss_Float
 ;loc_324C6
-Obj54_Display:
-	bsr.w	Obj54_AnimateFace
+ObjMTZBoss_Display:
+	bsr.w	ObjMTZBoss_AnimateFace
 	lea	(Ani_obj53).l,a1
 	bsr.w	AnimateBoss
-	bsr.w	Obj54_AlignSprites
+	bsr.w	ObjMTZBoss_AlignSprites
     if fixBugs
 	; Multi-sprite objects cannot use the 'priority' SST value, so they
 	; must use 'DisplaySprite3' instead of 'DisplaySprite'.
@@ -184,7 +184,7 @@ Obj54_Display:
     endif
 ; ===========================================================================
 ;loc_324DC
-Obj54_MainSub4:
+ObjMTZBoss_MainSub4:
 	bsr.w	Boss_MoveObject
 	cmpi.w	#$470,(Boss_Y_pos).w
 	bhs.s	+
@@ -204,48 +204,48 @@ Obj54_MainSub4:
 +
 	move.w	(Boss_X_vel).w,d0
 	or.w	(Boss_Y_vel).w,d0
-	bne.s	BranchTo_Obj54_MoveAndShow
-	addq.b	#2,boss_routine(a0)		; => Obj54_MainSub6
+	bne.s	BranchTo_ObjMTZBoss_MoveAndShow
+	addq.b	#2,boss_routine(a0)		; => ObjMTZBoss_MainSub6
 
-BranchTo_Obj54_MoveAndShow ; BranchTo
-	bra.s	Obj54_MoveAndShow
+BranchTo_ObjMTZBoss_MoveAndShow ; BranchTo
+	bra.s	ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 ;loc_32524
-Obj54_MainSub6:
+ObjMTZBoss_MainSub6:
 	cmpi.b	#$68,objoff_33(a0)
 	bhs.s	+
 	addq.b	#1,objoff_33(a0)
 	addq.b	#1,objoff_39(a0)
-	bra.s	BranchTo2_Obj54_MoveAndShow
+	bra.s	BranchTo2_ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 +
 	subq.b	#1,objoff_39(a0)
-	bne.s	BranchTo2_Obj54_MoveAndShow
-	addq.b	#2,boss_routine(a0)		; => Obj54_MainSub8
+	bne.s	BranchTo2_ObjMTZBoss_MoveAndShow
+	addq.b	#2,boss_routine(a0)		; => ObjMTZBoss_MainSub8
 
-BranchTo2_Obj54_MoveAndShow ; BranchTo
-	bra.w	Obj54_MoveAndShow
+BranchTo2_ObjMTZBoss_MoveAndShow ; BranchTo
+	bra.w	ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 ;loc_32544
-Obj54_MainSub8:
+ObjMTZBoss_MainSub8:
 	cmpi.b	#$27,objoff_33(a0)
 	blo.s	+
 	subq.b	#1,objoff_33(a0)
-	bra.s	BranchTo3_Obj54_MoveAndShow
+	bra.s	BranchTo3_ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 +
 	addq.b	#1,objoff_39(a0)
 	cmpi.b	#$27,objoff_39(a0)
-	blo.s	BranchTo3_Obj54_MoveAndShow
+	blo.s	BranchTo3_ObjMTZBoss_MoveAndShow
 	move.w	#$100,(Boss_Y_vel).w
-	move.b	#0,boss_routine(a0)		; => Obj54_MainSub0
+	move.b	#0,boss_routine(a0)		; => ObjMTZBoss_MainSub0
 	bclr	#6,objoff_2B(a0)
 
-BranchTo3_Obj54_MoveAndShow ; BranchTo
-	bra.w	Obj54_MoveAndShow
+BranchTo3_ObjMTZBoss_MoveAndShow ; BranchTo
+	bra.w	ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 ;loc_32574
-Obj54_MainSubA:
+ObjMTZBoss_MainSubA:
 	tst.b	objoff_39(a0)
 	beq.s	+
 	subq.b	#1,objoff_39(a0)
@@ -264,32 +264,32 @@ Obj54_MainSubA:
 	move.w	#0,(Boss_Y_vel).w
 +
 	tst.b	objoff_2C(a0)
-	bne.s	BranchTo4_Obj54_MoveAndShow
+	bne.s	BranchTo4_ObjMTZBoss_MoveAndShow
 	tst.b	objoff_3A(a0)
 	beq.s	+
 	move.b	#$80,objoff_3A(a0)
 +
-	addq.b	#2,boss_routine(a0)		; => Obj54_MainSubC
+	addq.b	#2,boss_routine(a0)		; => ObjMTZBoss_MainSubC
 
-BranchTo4_Obj54_MoveAndShow ; BranchTo
-	bra.w	Obj54_MoveAndShow
+BranchTo4_ObjMTZBoss_MoveAndShow ; BranchTo
+	bra.w	ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 ;loc_325BE
-Obj54_MainSubC:
+ObjMTZBoss_MainSubC:
 	tst.b	objoff_3E(a0)
 	beq.s	++
 	tst.b	objoff_3A(a0)
-	bne.s	BranchTo5_Obj54_MoveAndShow
+	bne.s	BranchTo5_ObjMTZBoss_MoveAndShow
 	cmpi.b	#$27,objoff_39(a0)
 	bhs.s	+
 	addq.b	#1,objoff_39(a0)
-	bra.s	BranchTo5_Obj54_MoveAndShow
+	bra.s	BranchTo5_ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 +
 	move.w	#$100,(Boss_Y_vel).w
-	move.b	#0,boss_routine(a0)		; => Obj54_MainSub0
+	move.b	#0,boss_routine(a0)		; => ObjMTZBoss_MainSub0
 	bclr	#6,objoff_2B(a0)
-	bra.s	BranchTo5_Obj54_MoveAndShow
+	bra.s	BranchTo5_ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 +
 	move.w	#-$180,(Boss_Y_vel).w
@@ -300,20 +300,20 @@ Obj54_MainSubC:
 	move.w	#$100,(Boss_X_vel).w
 	bset	#render_flags.x_flip,render_flags(a0)
 +
-	move.b	#$E,boss_routine(a0)		; => Obj54_MainSubE
+	move.b	#$E,boss_routine(a0)		; => ObjMTZBoss_MainSubE
 	move.b	#0,objoff_2E(a0)
 	bclr	#6,objoff_2B(a0)
 	move.b	#0,objoff_2F(a0)
 
-BranchTo5_Obj54_MoveAndShow ; BranchTo
-	bra.w	Obj54_MoveAndShow
+BranchTo5_ObjMTZBoss_MoveAndShow ; BranchTo
+	bra.w	ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 ;loc_3262E
-Obj54_MainSubE:
+ObjMTZBoss_MainSubE:
 	tst.b	objoff_2F(a0)
 	beq.s	+
 	subq.b	#1,objoff_2F(a0)
-	bra.w	Obj54_Display
+	bra.w	ObjMTZBoss_Display
 ; ===========================================================================
 +
 	moveq	#0,d0
@@ -336,25 +336,25 @@ loc_32650:
 	btst	#7,objoff_2B(a0)
 	bne.s	+
 	cmpi.w	#$2AF0,(Boss_X_pos).w
-	bhs.s	BranchTo6_Obj54_MoveAndShow
+	bhs.s	BranchTo6_ObjMTZBoss_MoveAndShow
 	addq.b	#2,objoff_2E(a0)
 	move.w	#$180,(Boss_Y_vel).w
 	move.b	#3,objoff_2D(a0)
 	move.w	#$1E,(Boss_Countdown).w
 	bset	#render_flags.x_flip,render_flags(a0)
-	bra.s	BranchTo6_Obj54_MoveAndShow
+	bra.s	BranchTo6_ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 +
 	cmpi.w	#$2BB0,(Boss_X_pos).w
-	blo.s	BranchTo6_Obj54_MoveAndShow
+	blo.s	BranchTo6_ObjMTZBoss_MoveAndShow
 	addq.b	#2,objoff_2E(a0)
 	move.w	#$180,(Boss_Y_vel).w
 	move.b	#3,objoff_2D(a0)
 	move.w	#$1E,(Boss_Countdown).w
 	bclr	#render_flags.x_flip,render_flags(a0)
 
-BranchTo6_Obj54_MoveAndShow ; BranchTo
-	bra.w	Obj54_MoveAndShow
+BranchTo6_ObjMTZBoss_MoveAndShow ; BranchTo
+	bra.w	ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 
 loc_326B8:
@@ -379,8 +379,8 @@ loc_326B8:
 	blo.s	+
 	move.w	#0,(Boss_X_vel).w
 +
-	bsr.w	Obj54_FireLaser
-	bra.w	Obj54_MoveAndShow
+	bsr.w	ObjMTZBoss_FireLaser
+	bra.w	ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 
 loc_32704:
@@ -397,11 +397,11 @@ loc_32704:
 	move.w	#0,(Boss_Y_vel).w
 	move.b	#0,objoff_2E(a0)
 +
-	bsr.w	Obj54_FireLaser
-	bra.w	Obj54_MoveAndShow
+	bsr.w	ObjMTZBoss_FireLaser
+	bra.w	ObjMTZBoss_MoveAndShow
 ; ===========================================================================
 ;loc_32740
-Obj54_FireLaser:
+ObjMTZBoss_FireLaser:
 	subi_.w	#1,(Boss_Countdown).w
 	bne.s	+		; rts
 	tst.b	objoff_2D(a0)
@@ -410,7 +410,7 @@ Obj54_FireLaser:
 	jsrto	JmpTo17_AllocateObject
 	bne.s	+		; rts
 	move.b	#ObjID_MTZBoss,id(a1) ; load obj54
-	move.b	#4,boss_subtype(a1)		; => Obj54_Laser
+	move.b	#4,boss_subtype(a1)		; => ObjMTZBoss_Laser
 	move.l	a0,objoff_34(a1)
 	move.w	#$1E,(Boss_Countdown).w
 	move.b	#$10,objoff_2F(a0)
@@ -418,7 +418,7 @@ Obj54_FireLaser:
 	rts
 ; ===========================================================================
 ;loc_32774
-Obj54_AlignSprites:
+ObjMTZBoss_AlignSprites:
 	move.w	x_pos(a0),d0
 	move.w	y_pos(a0),d1
 	move.w	d0,sub2_x_pos(a0)
@@ -428,8 +428,8 @@ Obj54_AlignSprites:
 	rts
 ; ===========================================================================
 ;loc_3278E
-Obj54_AnimateFace:
-	bsr.w	Obj54_CheckHit
+ObjMTZBoss_AnimateFace:
+	bsr.w	ObjMTZBoss_CheckHit
 	cmpi.b	#$3F,boss_invulnerable_time(a0)
 	bne.s	++
 	st.b	objoff_38(a0)
@@ -438,7 +438,7 @@ Obj54_AnimateFace:
 	ori.b	#5,2(a1)
 	tst.b	objoff_3E(a0)
 	beq.s	+
-	move.b	#$A,boss_routine(a0)		; => Obj54_MainSubA
+	move.b	#$A,boss_routine(a0)		; => ObjMTZBoss_MainSubA
 	move.w	#-$180,(Boss_Y_vel).w
 	subq.b	#1,objoff_3E(a0)
 	move.w	#0,(Boss_X_vel).w
@@ -463,7 +463,7 @@ Obj54_AnimateFace:
 	rts
 ; ===========================================================================
 ;loc_32802
-Obj54_MainSub10:
+ObjMTZBoss_MainSub10:
 	subq.w	#1,(Boss_Countdown).w
 	cmpi.w	#60,(Boss_Countdown).w
 	blo.s	++
@@ -477,7 +477,7 @@ Obj54_MainSub10:
 	bset	#render_flags.x_flip,render_flags(a0)
 	clr.w	(Boss_X_vel).w
 	clr.w	(Boss_Y_vel).w
-	addq.b	#2,boss_routine(a0)		; => Obj54_MainSub12
+	addq.b	#2,boss_routine(a0)		; => ObjMTZBoss_MainSub12
 	move.w	#-$12,(Boss_Countdown).w
 	lea	(Boss_AnimationArray).w,a1
 	move.b	#3,2(a1)
@@ -487,7 +487,7 @@ Obj54_MainSub10:
 	move.w	(Boss_X_pos).w,x_pos(a0)
 	lea	(Ani_obj53).l,a1
 	bsr.w	AnimateBoss
-	bsr.w	Obj54_AlignSprites
+	bsr.w	ObjMTZBoss_AlignSprites
     if fixBugs
 	; Multi-sprite objects cannot use the 'priority' SST value, so they
 	; must use 'DisplaySprite3' instead of 'DisplaySprite'.
@@ -500,7 +500,7 @@ Obj54_MainSub10:
     endif
 ; ===========================================================================
 ;loc_32864
-Obj54_MainSub12:
+ObjMTZBoss_MainSub12:
 	move.w	#$400,(Boss_X_vel).w
 	move.w	#-$40,(Boss_Y_vel).w
 	cmpi.w	#$2BF0,(Camera_Max_X_pos).w
@@ -523,7 +523,7 @@ Obj54_MainSub12:
 	move.w	(Boss_X_pos).w,x_pos(a0)
 	lea	(Ani_obj53).l,a1
 	bsr.w	AnimateBoss
-	bsr.w	Obj54_AlignSprites
+	bsr.w	ObjMTZBoss_AlignSprites
     if fixBugs
 	; Multi-sprite objects cannot use the 'priority' SST value, so they
 	; must use 'DisplaySprite3' instead of 'DisplaySprite'.
@@ -549,11 +549,11 @@ loc_328C0:
 	move.w	(Boss_X_pos).w,x_pos(a0)
 	addq.b	#2,boss_sine_count(a0)
 ;loc_328DE
-Obj54_CheckHit:
+ObjMTZBoss_CheckHit:
 	cmpi.b	#$10,boss_routine(a0)
 	bhs.s	return_32924
 	tst.b	boss_hitcount2(a0)
-	beq.s	Obj54_Defeated
+	beq.s	ObjMTZBoss_Defeated
 	tst.b	collision_flags(a0)
 	bne.s	return_32924
 	tst.b	boss_invulnerable_time(a0)
@@ -577,11 +577,11 @@ return_32924:
 	rts
 ; ===========================================================================
 ;loc_32926
-Obj54_Defeated:
+ObjMTZBoss_Defeated:
 	moveq	#100,d0
 	jsrto	JmpTo8_AddPoints
 	move.w	#$EF,(Boss_Countdown).w
-	move.b	#$10,boss_routine(a0)		; => Obj54_MainSub10
+	move.b	#$10,boss_routine(a0)		; => ObjMTZBoss_MainSub10
 	moveq	#PLCID_Capsule,d0
 	jsrto	JmpTo11_LoadPLC
 	rts
@@ -590,22 +590,22 @@ Obj54_Defeated:
 ; Object 53 - Shield orbs that surround MTZ boss
 ; ----------------------------------------------------------------------------
 ; Sprite_32940:
-Obj53:
+ObjMTZBossOrb:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj53_Index(pc,d0.w),d1
-	jmp	Obj53_Index(pc,d1.w)
+	move.w	ObjMTZBossOrb_Index(pc,d0.w),d1
+	jmp	ObjMTZBossOrb_Index(pc,d1.w)
 ; ===========================================================================
 ; off_3294E:
-Obj53_Index:	offsetTable
-		offsetTableEntry.w Obj53_Init	; 0
-		offsetTableEntry.w Obj53_Main	; 2
-		offsetTableEntry.w Obj53_BreakAway	; 4
-		offsetTableEntry.w Obj53_BounceAround	; 6
-		offsetTableEntry.w Obj53_Burst	; 8
+ObjMTZBossOrb_Index:	offsetTable
+		offsetTableEntry.w ObjMTZBossOrb_Init	; 0
+		offsetTableEntry.w ObjMTZBossOrb_Main	; 2
+		offsetTableEntry.w ObjMTZBossOrb_BreakAway	; 4
+		offsetTableEntry.w ObjMTZBossOrb_BounceAround	; 6
+		offsetTableEntry.w ObjMTZBossOrb_Burst	; 8
 ; ===========================================================================
 ; loc_32958:
-Obj53_Init:
+ObjMTZBossOrb_Init:
 	movea.l	a0,a1
 	moveq	#6,d3
 	moveq	#0,d2
@@ -617,11 +617,11 @@ Obj53_Init:
 	move.b	#$20,width_pixels(a1)
 	move.l	objoff_34(a0),objoff_34(a1)
 	move.b	#ObjID_MTZBossOrb,id(a1) ; load obj53
-	move.l	#Obj54_MapUnc_32DC6,mappings(a1)
+	move.l	#ObjMTZBoss_MapUnc_32DC6,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_MTZBoss,0,0),art_tile(a1)
 	ori.b	#1<<render_flags.level_fg,render_flags(a1)
 	move.b	#3,priority(a1)
-	addq.b	#2,routine(a1)		; => Obj53_Main
+	addq.b	#2,routine(a1)		; => ObjMTZBossOrb_Main
 	move.b	#5,mapping_frame(a1)
 	move.b	byte_329CC(pc,d2.w),objoff_28(a1)
 	move.b	byte_329CC(pc,d2.w),objoff_3B(a1)
@@ -655,16 +655,16 @@ byte_329D3:
 	even
 ; ===========================================================================
 ;loc_329DA
-Obj53_Main:
+ObjMTZBossOrb_Main:
 	movea.l	objoff_34(a0),a1 ; a1=object
 	move.w	y_pos(a1),objoff_2A(a0)
 	subi_.w	#4,objoff_2A(a0)
 	move.w	x_pos(a1),objoff_38(a0)
 	tst.b	objoff_38(a1)
-	beq.s	Obj53_ClearBossCollision
+	beq.s	ObjMTZBossOrb_ClearBossCollision
 	move.b	#0,objoff_38(a1)
 	addi_.b	#1,objoff_2C(a1)
-	addq.b	#2,routine(a0)		; => Obj53_BreakAway
+	addq.b	#2,routine(a0)		; => ObjMTZBossOrb_BreakAway
 	move.b	#60,objoff_32(a0)
 	move.b	#2,anim(a0)
 	move.w	#-$400,y_vel(a0)
@@ -691,17 +691,17 @@ Obj53_Main:
 	bra.s	+
 ; ===========================================================================
 ;loc_32A56
-Obj53_ClearBossCollision:
+ObjMTZBossOrb_ClearBossCollision:
 	cmpi.b	#2,collision_property(a0)
 	beq.s	+
 	move.b	#0,collision_flags(a1)
 +
-	bsr.w	Obj53_OrbitBoss
-	bsr.w	Obj53_SetAnimPriority
+	bsr.w	ObjMTZBossOrb_OrbitBoss
+	bsr.w	ObjMTZBossOrb_SetAnimPriority
 	jmpto	JmpTo40_DisplaySprite
 ; ===========================================================================
 ;loc_32A70
-Obj53_OrbitBoss:
+ObjMTZBossOrb_OrbitBoss:
 	move.b	objoff_29(a0),d0
 	jsr	(CalcSine).l
 	move.w	d0,d3
@@ -764,7 +764,7 @@ return_32B18:
 	rts
 ; ===========================================================================
 ;loc_32B1A
-Obj53_SetAnimPriority:
+ObjMTZBossOrb_SetAnimPriority:
 	move.w	objoff_30(a0),d0
 	bmi.s	++
 	cmpi.w	#$C,d0
@@ -791,7 +791,7 @@ Obj53_SetAnimPriority:
 	rts
 ; ===========================================================================
 ;loc_32B64
-Obj53_BreakAway:
+ObjMTZBossOrb_BreakAway:
 	tst.b	objoff_32(a0)
 	bmi.s	+
 	subq.b	#1,objoff_32(a0)
@@ -805,17 +805,17 @@ Obj53_BreakAway:
 	move.w	#$180,y_vel(a0)
 +
 	cmpi.w	#$4AC,y_pos(a0)
-	blo.s	Obj53_Animate
+	blo.s	ObjMTZBossOrb_Animate
 	move.w	#$4AC,y_pos(a0)
 	move.w	#$4AC,objoff_2E(a0)
 	move.b	#1,objoff_2C(a0)
 	addq.b	#2,routine(a0)
-	bsr.w	Obj53_FaceLeader
+	bsr.w	ObjMTZBossOrb_FaceLeader
 ;loc_32BB0
-Obj53_Animate:
+ObjMTZBossOrb_Animate:
 	bsr.w	+
     if fixBugs
-Obj53_Animate_Part2:
+ObjMTZBossOrb_Animate_Part2:
     endif
 	lea	(Ani_obj53).l,a1
 	jsrto	JmpTo21_AnimateSprite
@@ -837,21 +837,21 @@ Obj53_Animate_Part2:
 	rts
 ; ===========================================================================
 ;loc_32BDC
-Obj53_BounceAround:
+ObjMTZBossOrb_BounceAround:
 	tst.b	objoff_32(a0)
 	bmi.s	+
 	subq.b	#1,objoff_32(a0)
 	bpl.s	+
 	move.b	#$DA,collision_flags(a0)
 +
-	bsr.w	Obj53_CheckPlayerHit
+	bsr.w	ObjMTZBossOrb_CheckPlayerHit
 	cmpi.b	#$B,mapping_frame(a0)
     if ~~fixBugs
 	; If Tails defeats one of the clones two frames after Sonic has been
 	; hit by one, the game will crash due to incrementing routine twice.
-	bne.s	Obj53_Animate
+	bne.s	ObjMTZBossOrb_Animate
     else
-	bne.s	Obj53_Animate_Part2
+	bne.s	ObjMTZBossOrb_Animate_Part2
     endif
 	move.b	objoff_2C(a0),d0
 	jsr	(CalcSine).l
@@ -874,12 +874,12 @@ Obj53_BounceAround:
 ; ===========================================================================
 +
 	move.w	#$4AC,y_pos(a0)
-	bsr.w	Obj53_FaceLeader
+	bsr.w	ObjMTZBossOrb_FaceLeader
 	move.b	#1,objoff_2C(a0)
 	jmpto	JmpTo40_DisplaySprite
 ; ===========================================================================
 ;loc_32C4C
-Obj53_FaceLeader:
+ObjMTZBossOrb_FaceLeader:
 	move.w	(MainCharacter+x_pos).w,d0
 	sub.w	x_pos(a0),d0
 	bpl.s	+
@@ -891,7 +891,7 @@ Obj53_FaceLeader:
 	rts
 ; ===========================================================================
 ;loc_32C66
-Obj53_CheckPlayerHit:
+ObjMTZBossOrb_CheckPlayerHit:
 	cmpi.b	#4,(MainCharacter+routine).w
 	beq.s	+
 	cmpi.b	#4,(Sidekick+routine).w
@@ -908,7 +908,7 @@ Obj53_CheckPlayerHit:
 	rts
 ; ===========================================================================
 ;loc_32C98
-Obj53_Burst:
+ObjMTZBossOrb_Burst:
 	move.b	#SndID_BossExplosion,d0
 	jsrto	JmpTo10_PlaySound
 	movea.l	objoff_34(a0),a1 ; a1=object
@@ -916,24 +916,24 @@ Obj53_Burst:
 	jmpto	JmpTo61_DeleteObject
 ; ===========================================================================
 ;loc_32CAE
-Obj54_Laser:
+ObjMTZBoss_Laser:
 	moveq	#0,d0
 	move.b	routine_secondary(a0),d0
 	move.w	off_32CBC(pc,d0.w),d0
 	jmp	off_32CBC(pc,d0.w)
 ; ===========================================================================
 off_32CBC:	offsetTable
-		offsetTableEntry.w Obj54_Laser_Init	; 0
-		offsetTableEntry.w Obj54_Laser_Main	; 2
+		offsetTableEntry.w ObjMTZBoss_Laser_Init	; 0
+		offsetTableEntry.w ObjMTZBoss_Laser_Main	; 2
 ; ===========================================================================
 ;loc_32CC0
-Obj54_Laser_Init:
-	move.l	#Obj54_MapUnc_32DC6,mappings(a0)
+ObjMTZBoss_Laser_Init:
+	move.l	#ObjMTZBoss_MapUnc_32DC6,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_MTZBoss,0,0),art_tile(a0)
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#5,priority(a0)
 	move.b	#$12,mapping_frame(a0)
-	addq.b	#2,routine_secondary(a0)	; => Obj54_Laser_Main
+	addq.b	#2,routine_secondary(a0)	; => ObjMTZBoss_Laser_Main
 	movea.l	objoff_34(a0),a1 ; a1=object
 	move.b	#$50,width_pixels(a0)
 	move.w	x_pos(a1),x_pos(a0)
@@ -951,7 +951,7 @@ Obj54_Laser_Init:
 	move.b	#SndID_LaserBurst,d0
 	jsrto	JmpTo10_PlaySound
 ;loc_32D2C
-Obj54_Laser_Main:
+ObjMTZBoss_Laser_Main:
 	jsrto	JmpTo24_ObjectMove
 	cmpi.w	#$2AB0,x_pos(a0)
 	blo.w	JmpTo61_DeleteObject
@@ -960,7 +960,7 @@ Obj54_Laser_Main:
 	jmpto	JmpTo40_DisplaySprite
 ; ===========================================================================
 ;loc_32D48
-Obj54_LaserShooter:
+ObjMTZBoss_LaserShooter:
 	movea.l	objoff_34(a0),a1 ; a1=object
 	cmpi.b	#ObjID_MTZBoss,id(a1)
 	bne.w	JmpTo61_DeleteObject
@@ -1010,5 +1010,5 @@ byte_32DC3:	dc.b   7,$11,$FF
 ; ----------------------------------------------------------------------------
 ; sprite mappings
 ; ----------------------------------------------------------------------------
-Obj54_MapUnc_32DC6:	include "mappings/sprite/obj54.asm"
+ObjMTZBoss_MapUnc_32DC6:	include "mappings/sprite/obj54.asm"
 ; ===========================================================================

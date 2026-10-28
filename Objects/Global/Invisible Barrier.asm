@@ -2,21 +2,21 @@
 ; Object 74 - Invisible solid block
 ; ----------------------------------------------------------------------------
 ; Sprite_20EE0:
-Obj74:
+ObjInvisibleBlock:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj74_Index(pc,d0.w),d1
-	jmp	Obj74_Index(pc,d1.w)
+	move.w	ObjInvisibleBlock_Index(pc,d0.w),d1
+	jmp	ObjInvisibleBlock_Index(pc,d1.w)
 ; ===========================================================================
-; off_20EEE: Obj74_States:
-Obj74_Index:	offsetTable
-		offsetTableEntry.w Obj74_Init	; 0
-		offsetTableEntry.w Obj74_Main	; 2
+; off_20EEE: ObjInvisibleBlock_States:
+ObjInvisibleBlock_Index:	offsetTable
+		offsetTableEntry.w ObjInvisibleBlock_Init	; 0
+		offsetTableEntry.w ObjInvisibleBlock_Main	; 2
 ; ===========================================================================
 ; loc_20EF2:
-Obj74_Init:
-	addq.b	#2,routine(a0) ; => Obj74_Main
-	move.l	#Obj74_MapUnc_20F66,mappings(a0)
+ObjInvisibleBlock_Init:
+	addq.b	#2,routine(a0) ; => ObjInvisibleBlock_Main
+	move.l	#ObjInvisibleBlock_MapUnc_20F66,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Powerups,0,1),art_tile(a0)
 	jsrto	JmpTo12_Adjust2PArtPointer
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
@@ -32,7 +32,7 @@ Obj74_Init:
 	move.b	d1,y_radius(a0)
 
 ; loc_20F2E:
-Obj74_Main:
+ObjInvisibleBlock_Main:
 	moveq	#0,d1
 	move.b	width_pixels(a0),d1
 	addi.w	#$B,d1
@@ -62,4 +62,4 @@ Obj74_Main:
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj74_MapUnc_20F66:	include "Objects/Unused/Mappings/Invisible Barrier.map"
+ObjInvisibleBlock_MapUnc_20F66:	include "Objects/Unused/Mappings/Invisible Barrier.map"

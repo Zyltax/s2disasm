@@ -1,15 +1,15 @@
 ; ----------------------------------------------------------------------------
 ; the bottom part of the vehicle with the ability to fly is the parent object
 ; ----------------------------------------------------------------------------
-Obj56:
+ObjEHZBoss:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj56_Index(pc,d0.w),d1
-	jmp	Obj56_Index(pc,d1.w)
+	move.w	ObjEHZBoss_Index(pc,d0.w),d1
+	jmp	ObjEHZBoss_Index(pc,d1.w)
 ; ===========================================================================
 ; off_2EF26:
-Obj56_Index:	offsetTable
-		offsetTableEntry.w Obj56_Init	; 0 - Init
+ObjEHZBoss_Index:	offsetTable
+		offsetTableEntry.w ObjEHZBoss_Init	; 0 - Init
 		offsetTableEntry.w loc_2F262	; 2 - Flying vehicle, bottom = main object
 		offsetTableEntry.w loc_2F54E	; 4 - Propeller normal
 		offsetTableEntry.w loc_2F5F6	; 6 - Vehicle on ground
@@ -32,8 +32,8 @@ Obj56_Index:	offsetTable
 ; objoff_3C(ax)		timer after defeat
 
 ; loc_2EF36:
-Obj56_Init:
-	move.l	#Obj56_MapUnc_2FAF8,mappings(a0)	; main object
+ObjEHZBoss_Init:
+	move.l	#ObjEHZBoss_MapUnc_2FAF8,mappings(a0)	; main object
 	move.w	#make_art_tile(ArtTile_ArtNem_Eggpod_1,1,0),art_tile(a0) ; vehicle with ability to fly, bottom part
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#$81,subtype(a0)
@@ -54,7 +54,7 @@ Obj56_Init:
 	_move.b	#ObjID_EHZBoss,id(a1) ; load obj56
 	move.l	a0,objoff_34(a1)	; link top and bottom to each other
 	move.l	a1,objoff_34(a0)	; i.e. addresses for cross references
-	move.l	#Obj56_MapUnc_2FAF8,mappings(a1)
+	move.l	#ObjEHZBoss_MapUnc_2FAF8,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_Eggpod_1,0,0),art_tile(a1)
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
 	move.b	#$20,width_pixels(a1)
@@ -70,7 +70,7 @@ Obj56_Init:
 
 	_move.b	#ObjID_EHZBoss,id(a1) ; load obj56
 	move.l	a0,objoff_34(a1)	; linked to main object
-	move.l	#Obj56_MapUnc_2FA58,mappings(a1)
+	move.l	#ObjEHZBoss_MapUnc_2FA58,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_EHZBoss,0,0),art_tile(a1)
 	jsrto	JmpTo9_Adjust2PArtPointer2
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
@@ -90,7 +90,7 @@ Obj56_Init:
 
 	_move.b	#ObjID_EHZBoss,id(a1) ; load obj56
 	move.l	a0,objoff_34(a1)	; linked to main object
-	move.l	#Obj56_MapUnc_2F970,mappings(a1)
+	move.l	#ObjEHZBoss_MapUnc_2F970,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_EggChoppers,1,0),art_tile(a1)
 	jsrto	JmpTo9_Adjust2PArtPointer2
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
@@ -110,7 +110,7 @@ loc_2F098:
 
 	_move.b	#ObjID_EHZBoss,id(a1) ; load obj56
 	move.l	a0,objoff_34(a1)	; linked to main object
-	move.l	#Obj56_MapUnc_2FA58,mappings(a1)
+	move.l	#ObjEHZBoss_MapUnc_2FA58,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_EHZBoss,1,0),art_tile(a1)
 	jsrto	JmpTo9_Adjust2PArtPointer2
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
@@ -133,7 +133,7 @@ loc_2F098:
 
 	_move.b	#ObjID_EHZBoss,id(a1) ; load obj56
 	move.l	a0,objoff_34(a1)	; linked to main object
-	move.l	#Obj56_MapUnc_2FA58,mappings(a1)
+	move.l	#ObjEHZBoss_MapUnc_2FA58,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_EHZBoss,1,0),art_tile(a1)
 	jsrto	JmpTo9_Adjust2PArtPointer2
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
@@ -156,7 +156,7 @@ loc_2F098:
 
 	_move.b	#ObjID_EHZBoss,id(a1) ; load obj56
 	move.l	a0,objoff_34(a1)	; linked to main object
-	move.l	#Obj56_MapUnc_2FA58,mappings(a1)
+	move.l	#ObjEHZBoss_MapUnc_2FA58,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_EHZBoss,1,0),art_tile(a1)
 	jsrto	JmpTo9_Adjust2PArtPointer2
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
@@ -179,7 +179,7 @@ loc_2F098:
 
 	_move.b	#ObjID_EHZBoss,id(a1) ; load obj56
 	move.l	a0,objoff_34(a1)	; linked to main object
-	move.l	#Obj56_MapUnc_2FA58,mappings(a1)
+	move.l	#ObjEHZBoss_MapUnc_2FA58,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_EHZBoss,1,0),art_tile(a1)
 	jsrto	JmpTo9_Adjust2PArtPointer2
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
@@ -196,7 +196,7 @@ loc_2F098:
 	rts
 ; ===========================================================================
 
-loc_2F262:	; Obj56_VehicleMain:
+loc_2F262:	; ObjEHZBoss_VehicleMain:
 	moveq	#0,d0
 	move.b	routine_secondary(a0),d0
 	move.w	off_2F270(pc,d0.w),d1
@@ -211,7 +211,7 @@ off_2F270:	offsetTable
 		offsetTableEntry.w loc_2F38A	; A - flying off, moving camera
 ; ===========================================================================
 
-loc_2F27C:	; Obj56_VehicleMain_Sub0:
+loc_2F27C:	; ObjEHZBoss_VehicleMain_Sub0:
 	move.b	#0,collision_flags(a0)
 	cmpi.w	#$29D0,x_pos(a0)	; reached the point to unite with bottom vehicle?
 	ble.s	loc_2F29A
@@ -226,7 +226,7 @@ loc_2F29A:
 	jmpto	JmpTo35_DisplaySprite
 ; ===========================================================================
 
-loc_2F2A8:	; Obj56_VehicleMain_Sub2:
+loc_2F2A8:	; ObjEHZBoss_VehicleMain_Sub2:
 	moveq	#0,d0
 	move.b	objoff_2C(a0),d0	; tertiary routine
 	move.w	off_2F2B6(pc,d0.w),d1
@@ -237,7 +237,7 @@ off_2F2B6:	offsetTable
 		offsetTableEntry.w loc_2F2E0	; 2 - not moving, delay until activation
 ; ---------------------------------------------------------------------------
 
-loc_2F2BA:	; Obj56_VehicleMain_Sub2_0:
+loc_2F2BA:	; ObjEHZBoss_VehicleMain_Sub2_0:
 	cmpi.w	#$41E,y_pos(a0)
 	bge.s	loc_2F2CC
 	addi_.w	#1,y_pos(a0)	; move vertically (down)
@@ -251,7 +251,7 @@ loc_2F2CC:
 	jmpto	JmpTo35_DisplaySprite
 ; ---------------------------------------------------------------------------
 
-loc_2F2E0:	; Obj56_VehicleMain_Sub2_2:
+loc_2F2E0:	; ObjEHZBoss_VehicleMain_Sub2_2:
 	subi_.w	#1,objoff_2A(a0)	; timer
 	bpl.w	JmpTo35_DisplaySprite
 	move.w	#-$200,x_vel(a0)
@@ -261,7 +261,7 @@ loc_2F2E0:	; Obj56_VehicleMain_Sub2_2:
 	jmpto	JmpTo35_DisplaySprite
 ; ===========================================================================
 
-loc_2F304:	; Obj56_VehicleMain_Sub4:
+loc_2F304:	; ObjEHZBoss_VehicleMain_Sub4:
 	bsr.w	loc_2F4A6	; routine to handle hits
 	bsr.w	loc_2F484	; position check, sets direction
 	move.w	objoff_2E(a0),d0	; y_position of wheels
@@ -278,7 +278,7 @@ loc_2F304:	; Obj56_VehicleMain_Sub4:
 	jmpto	JmpTo35_DisplaySprite
 ; ===========================================================================
 
-loc_2F336:	; Obj56_VehicleMain_Sub6:
+loc_2F336:	; ObjEHZBoss_VehicleMain_Sub6:
 	subq.w	#1,objoff_3C(a0)	; timer set after defeat
 	bmi.s	loc_2F35C	; if countdown finished
 	bsr.w	Boss_LoadExplosion
@@ -299,7 +299,7 @@ loc_2F35C:
 	jmpto	JmpTo35_DisplaySprite
 ; ===========================================================================
 
-loc_2F374:	; Obj56_VehicleMain_Sub8:
+loc_2F374:	; ObjEHZBoss_VehicleMain_Sub8:
 	subq.w	#1,objoff_2A(a0)	; timer
 	bpl.w	JmpTo35_DisplaySprite
 	addq.b	#2,routine_secondary(a0)
@@ -307,7 +307,7 @@ loc_2F374:	; Obj56_VehicleMain_Sub8:
 	jmpto	JmpTo35_DisplaySprite
 ; ===========================================================================
 
-loc_2F38A:	; Obj56_VehicleMain_SubA:
+loc_2F38A:	; ObjEHZBoss_VehicleMain_SubA:
 	moveq	#0,d0
 	move.b	objoff_2C(a0),d0	; tertiary routine
 	move.w	off_2F39C(pc,d0.w),d1
@@ -320,14 +320,14 @@ off_2F39C:	offsetTable
 		offsetTableEntry.w loc_2F442	; 4 - flying off
 ; ===========================================================================
 
-loc_2F3A2:	; Obj56_VehicleMain_SubA_0:
+loc_2F3A2:	; ObjEHZBoss_VehicleMain_SubA_0:
 	bclr	#0,objoff_2D(a0)	; Robotnik off ground
 	jsrto	JmpTo21_AllocateObjectAfterCurrent	; reload propeller after defeat
 	bne.w	+	; rts
 
 	_move.b	#ObjID_EHZBoss,id(a1) ; load obj56
 	move.l	a0,objoff_34(a1)	; linked to main object
-	move.l	#Obj56_MapUnc_2F970,mappings(a1)
+	move.l	#ObjEHZBoss_MapUnc_2F970,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_EggChoppers,1,0),art_tile(a1)
 	jsrto	JmpTo9_Adjust2PArtPointer2
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
@@ -349,7 +349,7 @@ loc_2F3A2:	; Obj56_VehicleMain_SubA_0:
 	rts
 ; ===========================================================================
 
-loc_2F424:	; Obj56_VehicleMain_SubA_2:
+loc_2F424:	; ObjEHZBoss_VehicleMain_SubA_2:
 	subi_.w	#1,objoff_2A(a0)	; timer
 	bpl.s	+	; rts
 	bset	#2,objoff_2D(a0)	; Robotnik flying off
@@ -360,7 +360,7 @@ loc_2F424:	; Obj56_VehicleMain_SubA_2:
 	rts
 ; ===========================================================================
 
-loc_2F442:	; Obj56_VehicleMain_SubA_4:
+loc_2F442:	; ObjEHZBoss_VehicleMain_SubA_4:
 	subi_.w	#1,objoff_2A(a0)	; timer
 	bpl.s	loc_2F45C
 	bset	#status.npc.x_flip,status(a0)
@@ -455,7 +455,7 @@ loc_2F4EE:	; boss defeated
 	rts
 ; ===========================================================================
 
-loc_2F52A:	; Obj56_PropellerReloaded:	; Propeller after defeat
+loc_2F52A:	; ObjEHZBoss_PropellerReloaded:	; Propeller after defeat
 	subi_.w	#1,y_pos(a0)	; move up
 	subi_.w	#1,objoff_2A(a0)	; decrease timer
 	bpl.w	JmpTo35_DisplaySprite
@@ -465,7 +465,7 @@ loc_2F52A:	; Obj56_PropellerReloaded:	; Propeller after defeat
 	jmpto	JmpTo35_DisplaySprite
 ; ===========================================================================
 
-loc_2F54E:	; Obj56_Propeller:	; Propeller normal
+loc_2F54E:	; ObjEHZBoss_Propeller:	; Propeller normal
 	moveq	#0,d0
 	move.b	routine_secondary(a0),d0
 	move.w	off_2F55C(pc,d0.w),d1
@@ -476,7 +476,7 @@ off_2F55C:	offsetTable
 		offsetTableEntry.w loc_2F5C6	; 2 - Robotnik on ground
 ; ---------------------------------------------------------------------------
 
-loc_2F560:	; Obj56_Propeller_Sub0
+loc_2F560:	; ObjEHZBoss_Propeller_Sub0
 	movea.l	objoff_34(a0),a1 ; parent address (vehicle)
 	cmpi.b	#ObjID_EHZBoss,id(a1)
 	bne.w	JmpTo52_DeleteObject	; if boss non-existant
@@ -507,7 +507,7 @@ loc_2F5A0:
 	jmpto	JmpTo35_DisplaySprite
 ; ---------------------------------------------------------------------------
 
-loc_2F5C6:	; Obj56_Propeller_Sub2
+loc_2F5C6:	; ObjEHZBoss_Propeller_Sub2
 	subi_.w	#1,objoff_2A(a0)	; timer
 	bpl.s	loc_2F5E8
 	cmpi.w	#-$10,objoff_2A(a0)
@@ -523,10 +523,10 @@ loc_2F5E8:
 	jmpto	JmpTo35_DisplaySprite
 ; ===========================================================================
 
-loc_2F5F6:	; Obj56_GroundVehicle:
+loc_2F5F6:	; ObjEHZBoss_GroundVehicle:
 	tst.b	routine_secondary(a0)
 	bne.s	loc_2F626
-; Obj56_GroundVehicle_Sub0:
+; ObjEHZBoss_GroundVehicle_Sub0:
 	cmpi.w	#$28F0,(Camera_Min_X_pos).w
 	blo.w	JmpTo35_DisplaySprite
 	cmpi.w	#$29D0,x_pos(a0)
@@ -541,7 +541,7 @@ loc_2F618:
 	jmpto	JmpTo35_DisplaySprite
 ; ---------------------------------------------------------------------------
 
-loc_2F626:	; Obj56_GroundVehicle_Sub2:
+loc_2F626:	; ObjEHZBoss_GroundVehicle_Sub2:
 	movea.l	objoff_34(a0),a1 ; parent address (vehicle)
 	btst	#1,objoff_2D(a1)
 	beq.w	JmpTo35_DisplaySprite	; boss not moving yet (inactive)
@@ -556,7 +556,7 @@ loc_2F626:	; Obj56_GroundVehicle_Sub2:
 	jmpto	JmpTo35_DisplaySprite
 ; ===========================================================================
 
-loc_2F664:	; Obj56_Wheel:
+loc_2F664:	; ObjEHZBoss_Wheel:
 	moveq	#0,d0
 	move.b	routine_secondary(a0),d0
 	move.w	off_2F672(pc,d0.w),d1
@@ -570,7 +570,7 @@ off_2F672:	offsetTable
 		offsetTableEntry.w loc_2F7D2	; 8 - wheels bouncing away after defeat
 ; ---------------------------------------------------------------------------
 
-loc_2F67C:	; Obj56_Wheel_Sub0:
+loc_2F67C:	; ObjEHZBoss_Wheel_Sub0:
 	cmpi.w	#$28F0,(Camera_Min_X_pos).w
 	blo.w	JmpTo35_DisplaySprite
 	move.w	#$100,y_vel(a0)
@@ -629,7 +629,7 @@ loc_2F706:
 	jmpto	JmpTo35_DisplaySprite
 ; ---------------------------------------------------------------------------
 
-loc_2F714:	; Obj56_Wheel_Sub2:
+loc_2F714:	; ObjEHZBoss_Wheel_Sub2:
 	movea.l	objoff_34(a0),a1 ; parent address (vehicle)
 	cmpi.b	#ObjID_EHZBoss,id(a1)
 	bne.w	JmpTo52_DeleteObject	; if boss non-existant
@@ -646,7 +646,7 @@ BranchTo_JmpTo35_DisplaySprite ; BranchTo
 	jmpto	JmpTo35_DisplaySprite
 ; ---------------------------------------------------------------------------
 
-loc_2F746:	; Obj56_Wheel_Sub4:
+loc_2F746:	; ObjEHZBoss_Wheel_Sub4:
 	movea.l	objoff_34(a0),a1 ; parent address (vehicle)
 	cmpi.b	#ObjID_EHZBoss,id(a1)
 	bne.w	JmpTo52_DeleteObject	; if boss non-existant
@@ -678,7 +678,7 @@ loc_2F798:
 	jmpto	JmpTo35_DisplaySprite
 ; ---------------------------------------------------------------------------
 
-loc_2F7A6:	; Obj56_Wheel_Sub6:
+loc_2F7A6:	; ObjEHZBoss_Wheel_Sub6:
 	subi_.w	#1,objoff_2A(a0)	; timer, initially set to $A (first delay until wheels rolling off)
 	bpl.w	JmpTo35_DisplaySprite
 	addq.b	#2,routine_secondary(a0)	; Sub8
@@ -690,7 +690,7 @@ loc_2F7A6:	; Obj56_Wheel_Sub6:
 	jmpto	JmpTo35_DisplaySprite
 ; ---------------------------------------------------------------------------
 
-loc_2F7D2:	; Obj56_Wheel_Sub8:
+loc_2F7D2:	; ObjEHZBoss_Wheel_Sub8:
 	subq.w	#1,objoff_2A(a0)	; timer, initially set to $A (second delay until wheels rolling off)
 	bpl.w	JmpTo35_DisplaySprite
 	jsrto	JmpTo4_ObjectMoveAndFall
@@ -704,10 +704,10 @@ BranchTo_JmpTo36_MarkObjGone ; BranchTo
 	jmpto	JmpTo36_MarkObjGone
 ; ===========================================================================
 
-loc_2F7F4:	; Obj56_Spike:
+loc_2F7F4:	; ObjEHZBoss_Spike:
 	tst.b	routine_secondary(a0)
 	bne.s	loc_2F824
-; Obj56_Spike_Sub0:
+; ObjEHZBoss_Spike_Sub0:
 	cmpi.w	#$28F0,(Camera_Min_X_pos).w
 	blo.w	JmpTo35_DisplaySprite
 	cmpi.w	#$299A,x_pos(a0)
@@ -722,7 +722,7 @@ loc_2F816:
 	jmpto	JmpTo35_DisplaySprite
 ; ---------------------------------------------------------------------------
 
-loc_2F824:	; Obj56_Spike_Sub2:
+loc_2F824:	; ObjEHZBoss_Spike_Sub2:
 	movea.l	objoff_34(a0),a1 ; parent address (vehicle)
 	cmpi.b	#ObjID_EHZBoss,id(a1)
 	bne.w	JmpTo52_DeleteObject	; if boss non-existant
@@ -788,7 +788,7 @@ loc_2F8D2:
 	rts
 ; ===========================================================================
 
-loc_2F8DA:	; Obj56_VehicleTop:
+loc_2F8DA:	; ObjEHZBoss_VehicleTop:
 	movea.l	objoff_34(a0),a1 ; parent address (vehicle)
 	move.l	x_pos(a1),x_pos(a0)
 	move.l	y_pos(a1),y_pos(a0)
@@ -840,7 +840,7 @@ byte_2F956:
 ; ----------------------------------------------------------------------------
 ; sprite mappings
 ; ----------------------------------------------------------------------------
-Obj56_MapUnc_2F970:	include "mappings/sprite/obj56_a.asm"
+ObjEHZBoss_MapUnc_2F970:	include "mappings/sprite/obj56_a.asm"
 	; propeller
 	; 7 frames
 
@@ -863,7 +863,7 @@ byte_2FA53:
 ; ----------------------------------------------------------------------------
 ; sprite mappings
 ; ----------------------------------------------------------------------------
-Obj56_MapUnc_2FA58:	include "mappings/sprite/obj56_b.asm"
+ObjEHZBoss_MapUnc_2FA58:	include "mappings/sprite/obj56_b.asm"
 	; ground vehicle
 	; frame 0 = vehicle itself
 	; frame 1-3 = spike
@@ -892,7 +892,7 @@ byte_2FAEB:	dc.b  $F,  6,  6,  6,  6,  6,  6,  6,  6,  6,  6,$FD,  1	; top, when
 ; ----------------------------------------------------------------------------
 ; sprite mappings
 ; ----------------------------------------------------------------------------
-Obj56_MapUnc_2FAF8:	include "mappings/sprite/obj56_c.asm"
+ObjEHZBoss_MapUnc_2FAF8:	include "mappings/sprite/obj56_c.asm"
 	; flying vehicle
 	; frame 0 = bottom
 	; frame 1-2 = top, normal

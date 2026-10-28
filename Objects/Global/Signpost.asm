@@ -7,26 +7,26 @@ obj0D_sparkleframe	= objoff_34 ; $34(a0)
 obj0D_finalanim		= objoff_36 ; $36(a0) ; 4 if Tails only, 3 otherwise (determines what character to show)
 ; ----------------------------------------------------------------------------
 
-Obj0D:
+ObjSignpost:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj0D_Index(pc,d0.w),d1
-	jsr	Obj0D_Index(pc,d1.w)
+	move.w	ObjSignpost_Index(pc,d0.w),d1
+	jsr	ObjSignpost_Index(pc,d1.w)
 	lea	(Ani_obj0D).l,a1
 	bsr.w	AnimateSprite
 	bsr.w	PLCLoad_Signpost
 	bra.w	MarkObjGone
 ; ===========================================================================
-; off_191D8: Obj_0D_subtbl: Obj0D_States:
-Obj0D_Index:	offsetTable
-		offsetTableEntry.w Obj0D_Init	; 0
-		offsetTableEntry.w Obj0D_Main	; 2
+; off_191D8: Obj_0D_subtbl: ObjSignpost_States:
+ObjSignpost_Index:	offsetTable
+		offsetTableEntry.w ObjSignpost_Init	; 0
+		offsetTableEntry.w ObjSignpost_Main	; 2
 ; ===========================================================================
 ; loc_191DC: Obj_0D_sub_0:
-Obj0D_Init:
+ObjSignpost_Init:
 	tst.w	(Two_player_mode).w
 	beq.s	loc_19208
-	move.l	#Obj0D_MapUnc_19656,mappings(a0)
+	move.l	#ObjSignpost_MapUnc_19656,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_2p_Signpost,0,0),art_tile(a0)
 	move.b	#-1,(Signpost_prev_frame).w
 	moveq	#0,d1
@@ -46,11 +46,11 @@ loc_19208:
 	rts
 ; ---------------------------------------------------------------------------
 loc_1921E:
-	move.l	#Obj0D_MapUnc_195BE,mappings(a0)
+	move.l	#ObjSignpost_MapUnc_195BE,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Signpost,0,0),art_tile(a0)
 
 loc_1922C:
-	addq.b	#2,routine(a0) ; => Obj0D_Main
+	addq.b	#2,routine(a0) ; => ObjSignpost_Main
 	bsr.w	Adjust2PArtPointer
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#$18,width_pixels(a0)
@@ -58,7 +58,7 @@ loc_1922C:
 	move.w	#$3C3C,(Loser_Time_Left).w
 
 ; loc_1924C: Obj_0D_sub_2:
-Obj0D_Main:
+ObjSignpost_Main:
 	tst.b	(Update_HUD_timer).w
 	beq.w	loc_192D6
 	lea	(MainCharacter).w,a1 ; a1=character
@@ -73,7 +73,7 @@ Obj0D_Main:
 	move.w	#(0<<8)|(1<<0),anim(a0)
 	move.w	#0,obj0D_spinframe(a0)
 	move.w	(Camera_Max_X_pos).w,(Camera_Min_X_pos).w	; lock screen
-	move.b	#2,routine_secondary(a0) ; => Obj0D_Main_State2
+	move.b	#2,routine_secondary(a0) ; => ObjSignpost_Main_State2
 	cmpi.b	#$C,(Loser_Time_Left).w
 	bhi.s	loc_192A0
 	move.w	(Level_Music).w,d0
@@ -113,7 +113,7 @@ loc_192D6:
 	move.w	#(0<<8)|(1<<0),anim(a0)
 	move.w	#0,obj0D_spinframe(a0)
 	move.w	(Tails_Max_X_pos).w,(Tails_Min_X_pos).w
-	move.b	#2,routine_secondary(a0) ; => Obj0D_Main_State2
+	move.b	#2,routine_secondary(a0) ; => ObjSignpost_Main_State2
 	cmpi.b	#$C,(Loser_Time_Left).w
 	bhi.s	loc_1932E
 	move.w	(Level_Music).w,d0
@@ -132,32 +132,32 @@ loc_1932E:
 loc_19350:
 	moveq	#0,d0
 	move.b	routine_secondary(a0),d0
-	move.w	Obj0D_Main_States(pc,d0.w),d1
-	jmp	Obj0D_Main_States(pc,d1.w)
+	move.w	ObjSignpost_Main_States(pc,d0.w),d1
+	jmp	ObjSignpost_Main_States(pc,d1.w)
 ; ===========================================================================
-Obj0D_Main_States: offsetTable
-	offsetTableEntry.w Obj0D_Main_StateNull	; 0
-	offsetTableEntry.w Obj0D_Main_State2	; 2
-	offsetTableEntry.w Obj0D_Main_State3	; 4
-	offsetTableEntry.w Obj0D_Main_State4	; 6
+ObjSignpost_Main_States: offsetTable
+	offsetTableEntry.w ObjSignpost_Main_StateNull	; 0
+	offsetTableEntry.w ObjSignpost_Main_State2	; 2
+	offsetTableEntry.w ObjSignpost_Main_State3	; 4
+	offsetTableEntry.w ObjSignpost_Main_State4	; 6
 ; ===========================================================================
 ; return_19366:
-Obj0D_Main_StateNull:
+ObjSignpost_Main_StateNull:
 	rts
 ; ===========================================================================
 ; loc_19368:
-Obj0D_Main_State2:
+ObjSignpost_Main_State2:
 	subq.w	#1,obj0D_spinframe(a0)
 	bpl.s	loc_19398
 	move.w	#60,obj0D_spinframe(a0)
 	addq.b	#1,anim(a0)
 	cmpi.b	#3,anim(a0)
 	bne.s	loc_19398
-	move.b	#4,routine_secondary(a0) ; => Obj0D_Main_State3
+	move.b	#4,routine_secondary(a0) ; => ObjSignpost_Main_State3
 	move.b	obj0D_finalanim(a0),anim(a0)
 	tst.w	(Two_player_mode).w
 	beq.s	loc_19398
-	move.b	#6,routine_secondary(a0) ; => Obj0D_Main_State4
+	move.b	#6,routine_secondary(a0) ; => ObjSignpost_Main_State4
 
 loc_19398:
 	subq.w	#1,objoff_32(a0)
@@ -167,7 +167,7 @@ loc_19398:
 	move.b	obj0D_sparkleframe(a0),d0
 	addq.b	#2,obj0D_sparkleframe(a0)
 	andi.b	#$E,obj0D_sparkleframe(a0)
-	lea	Obj0D_RingSparklePositions(pc,d0.w),a2
+	lea	ObjSignpost_RingSparklePositions(pc,d0.w),a2
 	bsr.w	AllocateObject
 	bne.s	return_19406
 	_move.b	#ObjID_Ring,id(a1) ; load obj25 (a ring) for the sparkly effects over the signpost
@@ -180,7 +180,7 @@ loc_19398:
 	ext.w	d0
 	add.w	y_pos(a0),d0
 	move.w	d0,y_pos(a1)
-	move.l	#Obj25_MapUnc_12382,mappings(a1)
+	move.l	#ObjRing_MapUnc_12382,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_Ring,1,0),art_tile(a1)
 	bsr.w	Adjust2PArtPointer2
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
@@ -191,7 +191,7 @@ return_19406:
 	rts
 ; ===========================================================================
 ; byte_19408:
-Obj0D_RingSparklePositions:
+ObjSignpost_RingSparklePositions:
 	dc.b -24,-16	; 1
 	dc.b   8,  8	; 3
 	dc.b -16,  0	; 5
@@ -202,7 +202,7 @@ Obj0D_RingSparklePositions:
 	dc.b  24, 16	; 15
 ; ===========================================================================
 ; loc_19418:
-Obj0D_Main_State3:
+ObjSignpost_Main_State3:
 	tst.w	(Debug_placement_mode).w
 	bne.w	return_194D0
     if fixBugs
@@ -233,7 +233,7 @@ loc_19434:
 	blo.w	return_194D0
 
 loc_1944C:
-	move.b	#0,routine_secondary(a0) ; => Obj0D_Main_StateNull
+	move.b	#0,routine_secondary(a0) ; => ObjSignpost_Main_StateNull
 ;loc_19452:
 Load_EndOfAct:
 	lea	(MainCharacter).w,a1 ; a1=character
@@ -287,7 +287,7 @@ TimeBonuses:
 TimeBonuses_End:
 ; ===========================================================================
 ; loc_194FC:
-Obj0D_Main_State4:
+ObjSignpost_Main_State4:
 	subq.w	#1,obj0D_spinframe(a0)
 	bpl.s	return_19532
 	tst.b	(Time_Over_flag).w
@@ -315,7 +315,7 @@ PLCLoad_Signpost:
 	cmp.b	(Signpost_prev_frame).w,d0
 	beq.s	return_1958C
 	move.b	d0,(Signpost_prev_frame).w
-	lea	(Obj0D_MapRUnc_196EE).l,a2
+	lea	(ObjSignpost_MapRUnc_196EE).l,a2
 	add.w	d0,d0
 	adda.w	(a2,d0.w),a2
 	move.w	(a2)+,d5
@@ -366,15 +366,15 @@ byte_195BA:	dc.b	$0F, $01, $FF
 ; sprite mappings - Primary sprite table for object 0D (signpost)
 ; -------------------------------------------------------------------------------
 ; SprTbl_0D_Primary:
-Obj0D_MapUnc_195BE:	include "mappings/sprite/obj0D_a.asm"
+ObjSignpost_MapUnc_195BE:	include "mappings/sprite/obj0D_a.asm"
 ; -------------------------------------------------------------------------------
 ; sprite mappings - Secondary sprite table for object 0D (signpost)
 ; -------------------------------------------------------------------------------
 ; SprTbl_0D_Scndary:
-Obj0D_MapUnc_19656:	include "mappings/sprite/obj0D_b.asm"
+ObjSignpost_MapUnc_19656:	include "mappings/sprite/obj0D_b.asm"
 ; -------------------------------------------------------------------------------
 ; dynamic pattern loading cues
 ; -------------------------------------------------------------------------------
-Obj0D_MapRUnc_196EE:	include "mappings/spriteDPLC/obj0D.asm"
+ObjSignpost_MapRUnc_196EE:	include "mappings/spriteDPLC/obj0D.asm"
 ; ===========================================================================
 

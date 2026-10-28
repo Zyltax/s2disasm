@@ -3,24 +3,24 @@
 ; Object 79 - Star pole / starpost / checkpoint
 ; ----------------------------------------------------------------------------
 ; Sprite_1F0B4:
-Obj79:
+ObjStarpost:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj79_Index(pc,d0.w),d1
-	jmp	Obj79_Index(pc,d1.w)
+	move.w	ObjStarpost_Index(pc,d0.w),d1
+	jmp	ObjStarpost_Index(pc,d1.w)
 ; ===========================================================================
-; off_1F0C2: Obj79_States:
-Obj79_Index:	offsetTable
-		offsetTableEntry.w Obj79_Init		; 0
-		offsetTableEntry.w Obj79_Main		; 2
-		offsetTableEntry.w Obj79_Animate	; 4
-		offsetTableEntry.w Obj79_Dongle		; 6
-		offsetTableEntry.w Obj79_Star		; 8
+; off_1F0C2: ObjStarpost_States:
+ObjStarpost_Index:	offsetTable
+		offsetTableEntry.w ObjStarpost_Init		; 0
+		offsetTableEntry.w ObjStarpost_Main		; 2
+		offsetTableEntry.w ObjStarpost_Animate	; 4
+		offsetTableEntry.w ObjStarpost_Dongle		; 6
+		offsetTableEntry.w ObjStarpost_Star		; 8
 ; ===========================================================================
 ; loc_1F0CC:
-Obj79_Init:
-	addq.b	#2,routine(a0) ; => Obj79_Main
-	move.l	#Obj79_MapUnc_1F424,mappings(a0)
+ObjStarpost_Init:
+	addq.b	#2,routine(a0) ; => ObjStarpost_Main
+	move.l	#ObjStarpost_MapUnc_1F424,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Checkpoint,0,0),art_tile(a0)
 	jsrto	JmpTo3_Adjust2PArtPointer
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
@@ -35,7 +35,7 @@ Obj79_Init:
 	; activated too. The cause of the bug is that the spawned checkpoint
 	; does not have a respawn entry, but this object fails to check for
 	; that before accessing the respawn table.
-	beq.s	Obj79_Main
+	beq.s	ObjStarpost_Main
     endif
 	bclr	#7,Obj_respawn_data-Object_Respawn_Table(a2,d0.w)
 	btst	#0,Obj_respawn_data-Object_Respawn_Table(a2,d0.w)
@@ -45,28 +45,28 @@ Obj79_Init:
 	move.b	subtype(a0),d2
 	andi.b	#$7F,d2
 	cmp.b	d2,d1
-	blo.s	Obj79_Main
+	blo.s	ObjStarpost_Main
 
 loc_1F120:
 	bset	#0,Obj_respawn_data-Object_Respawn_Table(a2,d0.w)
 	move.b	#2,anim(a0)
 
 ; loc_1F12C:
-Obj79_Main:
+ObjStarpost_Main:
 	tst.w	(Debug_placement_mode).w
-	bne.w	Obj79_Animate
+	bne.w	ObjStarpost_Animate
 	lea	(MainCharacter).w,a3 ; a3=character
 	move.b	(Last_star_pole_hit).w,d1
-	bsr.s	Obj79_CheckActivation
+	bsr.s	ObjStarpost_CheckActivation
 	tst.w	(Two_player_mode).w
-	beq.w	Obj79_Animate
+	beq.w	ObjStarpost_Animate
 	lea	(Sidekick).w,a3 ; a3=character
 	move.b	(Last_star_pole_hit_2P).w,d1
-	bsr.s	Obj79_CheckActivation
-	bra.w	Obj79_Animate
+	bsr.s	ObjStarpost_CheckActivation
+	bra.w	ObjStarpost_Animate
 ; ---------------------------------------------------------------------------
 ; loc_1F154:
-Obj79_CheckActivation:
+ObjStarpost_CheckActivation:
 	andi.b	#$7F,d1
 	move.b	subtype(a0),d2
 	andi.b	#$7F,d2
@@ -87,7 +87,7 @@ Obj79_CheckActivation:
 	jsr	(AllocateObject).l
 	bne.s	loc_1F206
 	_move.b	#ObjID_Starpost,id(a1) ; load obj79
-	move.b	#6,routine(a1) ; => Obj79_Dongle
+	move.b	#6,routine(a1) ; => ObjStarpost_Dongle
 	move.w	x_pos(a0),objoff_30(a1)
 	move.w	y_pos(a0),objoff_32(a1)
 	subi.w	#$14,objoff_32(a1)
@@ -105,11 +105,11 @@ Obj79_CheckActivation:
 	beq.s	loc_1F206
 	cmpi.w	#50,(Ring_count).w
 	blo.s	loc_1F206
-	bsr.w	Obj79_MakeSpecialStars
+	bsr.w	ObjStarpost_MakeSpecialStars
 
 loc_1F206:
 	move.b	#1,anim(a0)
-	bsr.w	Obj79_SaveData
+	bsr.w	ObjStarpost_SaveData
 	lea	(Object_Respawn_Table).w,a2
 	moveq	#0,d0
 	move.b	respawn_index(a0),d0
@@ -136,15 +136,15 @@ return_1F22E:
 	rts
 ; ===========================================================================
 ; loc_1F230:
-Obj79_Animate:
+ObjStarpost_Animate:
 	lea	(Ani_obj79).l,a1
 	jsrto	JmpTo2_AnimateSprite
 	jmp	(MarkObjGone).l
 ; ===========================================================================
 ; loc_1F240:
-Obj79_Dongle:
+ObjStarpost_Dongle:
 	subq.w	#1,objoff_36(a0)
-	bpl.s	Obj79_MoveDonglyThing
+	bpl.s	ObjStarpost_MoveDonglyThing
 	movea.w	parent(a0),a1 ; a1=object
 	cmpi.b	#ObjID_Starpost,id(a1)
 	bne.s	+
@@ -154,7 +154,7 @@ Obj79_Dongle:
 	jmp	(DeleteObject).l
 ; ===========================================================================
 ; loc_1F262:
-Obj79_MoveDonglyThing:
+ObjStarpost_MoveDonglyThing:
 	move.b	angle(a0),d0
 	subi.b	#$10,angle(a0)
 	subi.b	#$40,d0
@@ -171,9 +171,9 @@ Obj79_MoveDonglyThing:
 ; ===========================================================================
 ; hit a starpost / save checkpoint
 ; loc_1F298:
-Obj79_SaveData:
+ObjStarpost_SaveData:
 	cmpa.w	#MainCharacter,a3	; is it player 1?
-	bne.w	Obj79_SaveDataPlayer2	; if not, branch
+	bne.w	ObjStarpost_SaveDataPlayer2	; if not, branch
 	move.b	subtype(a0),(Last_star_pole_hit).w
 	move.b	(Last_star_pole_hit).w,(Saved_Last_star_pole_hit).w
 	move.w	x_pos(a0),(Saved_x_pos).w
@@ -200,7 +200,7 @@ Obj79_SaveData:
 ; ===========================================================================
 ; second player hit a checkpoint in 2-player mode
 ; loc_1F326:
-Obj79_SaveDataPlayer2:
+ObjStarpost_SaveDataPlayer2:
 	move.b	subtype(a0),(Last_star_pole_hit_2P).w
 	move.b	(Last_star_pole_hit_2P).w,(Saved_Last_star_pole_hit_2P).w
 	move.w	x_pos(a0),(Saved_x_pos_2P).w
@@ -214,7 +214,7 @@ Obj79_SaveDataPlayer2:
 ; ===========================================================================
 ; continue from a starpost / load checkpoint
 ; loc_1F35E:
-Obj79_LoadData:
+ObjStarpost_LoadData:
 	move.b	(Saved_Last_star_pole_hit).w,(Last_star_pole_hit).w
 	move.w	(Saved_x_pos).w,(MainCharacter+x_pos).w
 	move.w	(Saved_y_pos).w,(MainCharacter+y_pos).w
@@ -272,25 +272,25 @@ byte_1F420:
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj79_MapUnc_1F424:	include "mappings/sprite/obj79_a.asm"
+ObjStarpost_MapUnc_1F424:	include "mappings/sprite/obj79_a.asm"
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj79_MapUnc_1F4A0:	include "mappings/sprite/obj79_b.asm"
+ObjStarpost_MapUnc_1F4A0:	include "mappings/sprite/obj79_b.asm"
 ; ===========================================================================
 
 ; loc_1F4C4:
-Obj79_MakeSpecialStars:
+ObjStarpost_MakeSpecialStars:
 	moveq	#4-1,d1 ; execute the loop 4 times (1 for each star)
 	moveq	#0,d2
 
 -	bsr.w	AllocateObjectAfterCurrent
 	bne.s	+	; rts
 	_move.b	id(a0),id(a1) ; load obj79
-	move.l	#Obj79_MapUnc_1F4A0,mappings(a1)
+	move.l	#ObjStarpost_MapUnc_1F4A0,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_Checkpoint,0,0),art_tile(a1)
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
-	move.b	#8,routine(a1) ; => Obj79_Star
+	move.b	#8,routine(a1) ; => ObjStarpost_Star
 	move.w	x_pos(a0),d0
 	move.w	d0,x_pos(a1)
 	move.w	d0,objoff_30(a1)
@@ -310,7 +310,7 @@ Obj79_MakeSpecialStars:
 	rts
 ; ===========================================================================
 ; loc_1F536:
-Obj79_Star:
+ObjStarpost_Star:
 	move.b	collision_property(a0),d0
 	beq.w	loc_1F554
 	andi.b	#1,d0

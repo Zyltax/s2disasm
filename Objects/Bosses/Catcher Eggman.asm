@@ -1,19 +1,19 @@
 ; Sprite_318F0:
-Obj51:
+ObjCNZBoss:
 	moveq	#0,d0
 	move.b	boss_subtype(a0),d0
-	move.w	Obj51_Index(pc,d0.w),d1
-	jmp	Obj51_Index(pc,d1.w)
+	move.w	ObjCNZBoss_Index(pc,d0.w),d1
+	jmp	ObjCNZBoss_Index(pc,d1.w)
 ; ===========================================================================
 ; off_318FE:
-Obj51_Index:	offsetTable
-		offsetTableEntry.w Obj51_Init	; 0
+ObjCNZBoss_Index:	offsetTable
+		offsetTableEntry.w ObjCNZBoss_Init	; 0
 		offsetTableEntry.w loc_31A04	; 2
 		offsetTableEntry.w loc_31F24	; 4
 ; ===========================================================================
 ; loc_31904:
-Obj51_Init:
-	move.l	#Obj51_MapUnc_320EA,mappings(a0)
+ObjCNZBoss_Init:
+	move.l	#ObjCNZBoss_MapUnc_320EA,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZBoss_Fudge,0,0),art_tile(a0)
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
     if ~~fixBugs
@@ -581,7 +581,7 @@ off_31F40:	offsetTable
 ; ===========================================================================
 
 loc_31F48:
-	move.l	#Obj51_MapUnc_320EA,mappings(a0)
+	move.l	#ObjCNZBoss_MapUnc_320EA,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_CNZBoss_Fudge,0,0),art_tile(a0)
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#7,priority(a0)
@@ -731,5 +731,5 @@ byte_320E4:	dc.b   1, $F,$10,$11,$FF
 ; ----------------------------------------------------------------------------
 ; sprite mappings
 ; ----------------------------------------------------------------------------
-Obj51_MapUnc_320EA:	include "mappings/sprite/obj51.asm"
+ObjCNZBoss_MapUnc_320EA:	include "mappings/sprite/obj51.asm"
 ; ===========================================================================

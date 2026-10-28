@@ -9,21 +9,21 @@ spikes_retract_offset	= objoff_34	; actual position relative to base position
 spikes_retract_state	= objoff_36	; 0 = positive offset, 1 = original position
 spikes_retract_timer	= objoff_38	; delay, before spikes move again
 ; Sprite_15900:
-Obj36:
+ObjSpikes:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj36_Index(pc,d0.w),d1
-	jmp	Obj36_Index(pc,d1.w)
+	move.w	ObjSpikes_Index(pc,d0.w),d1
+	jmp	ObjSpikes_Index(pc,d1.w)
 ; ===========================================================================
 ; off_1590E:
-Obj36_Index:	offsetTable
-		offsetTableEntry.w Obj36_Init		; 0
-		offsetTableEntry.w Obj36_Upright	; 2
-		offsetTableEntry.w Obj36_Sideways	; 4
-		offsetTableEntry.w Obj36_Upsidedown	; 6
+ObjSpikes_Index:	offsetTable
+		offsetTableEntry.w ObjSpikes_Init		; 0
+		offsetTableEntry.w ObjSpikes_Upright	; 2
+		offsetTableEntry.w ObjSpikes_Sideways	; 4
+		offsetTableEntry.w ObjSpikes_Upsidedown	; 6
 ; ===========================================================================
 ; byte_15916:
-Obj36_InitData:
+ObjSpikes_InitData:
 	;    width_pixels
 	;	 y_radius
 	dc.b $10,$10	; 0	- Upright or ceiling spikes
@@ -36,16 +36,16 @@ Obj36_InitData:
 	dc.b $10,$40	; 14
 ; ===========================================================================
 ; loc_15926:
-Obj36_Init:
-	addq.b	#2,routine(a0)	; => Obj36_Upright
-	move.l	#Obj36_MapUnc_15B68,mappings(a0)
+ObjSpikes_Init:
+	addq.b	#2,routine(a0)	; => ObjSpikes_Upright
+	move.l	#ObjSpikes_MapUnc_15B68,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_Spikes,1,0),art_tile(a0)
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#4,priority(a0)
 	move.b	subtype(a0),d0
 	andi.b	#$F,subtype(a0)		; lower 4 bits determine behavior, upper bits need to be removed
 	andi.w	#$F0,d0
-	lea_	Obj36_InitData,a1	; upper 4 bits determine size and orientation
+	lea_	ObjSpikes_InitData,a1	; upper 4 bits determine size and orientation
 	lsr.w	#3,d0			; use upper 4 bits * 2 as offset
 	adda.w	d0,a1
 	move.b	(a1)+,width_pixels(a0)
@@ -54,19 +54,19 @@ Obj36_Init:
 	move.b	d0,mapping_frame(a0)
 	cmpi.b	#4,d0			; do spikes face sideways?
 	blo.s	+			; if not, branch
-	addq.b	#2,routine(a0)	; => Obj36_Sideways
+	addq.b	#2,routine(a0)	; => ObjSpikes_Sideways
 	move.w	#make_art_tile(ArtTile_ArtNem_HorizSpike,1,0),art_tile(a0)
 +
 	btst	#status.npc.y_flip,status(a0)		; are spikes upside-down?
 	beq.s	+			; if not, branch
-	move.b	#6,routine(a0)	; => Obj36_Upsidedown
+	move.b	#6,routine(a0)	; => ObjSpikes_Upsidedown
 +
 	move.w	x_pos(a0),spikes_base_x_pos(a0)
 	move.w	y_pos(a0),spikes_base_y_pos(a0)
 	bra.w	Adjust2PArtPointer
 ; ===========================================================================
 ; loc_15996:
-Obj36_Upright:
+ObjSpikes_Upright:
 	bsr.w	MoveSpikes
 	moveq	#0,d1
 	move.b	width_pixels(a0),d1
@@ -79,7 +79,7 @@ Obj36_Upright:
 	bsr.w	SolidObject
 	move.b	status(a0),d6
 	andi.b	#standing_mask,d6	; are Sonic or Tails standing on the object?
-	beq.s	Obj36_UprightEnd	; if not, branch
+	beq.s	ObjSpikes_UprightEnd	; if not, branch
 	move.b	d6,d0
 	andi.b	#p1_standing,d0		; is Sonic standing on the object?
 	beq.s	+			; if not, branch
@@ -87,17 +87,17 @@ Obj36_Upright:
 	bsr.w	Touch_ChkHurt2
 +
 	andi.b	#p2_standing,d6		; is Tails standing on the object?
-	beq.s	Obj36_UprightEnd	; if not, branch
+	beq.s	ObjSpikes_UprightEnd	; if not, branch
 	lea	(Sidekick).w,a1 ; a1=character
 	bsr.w	Touch_ChkHurt2
 
 ; loc_159DE:
-Obj36_UprightEnd:
+ObjSpikes_UprightEnd:
 	move.w	spikes_base_x_pos(a0),d0
 	bra.w	MarkObjGone2
 ; ===========================================================================
 ; loc_159E6:
-Obj36_Sideways:
+ObjSpikes_Sideways:
 	move.w	x_pos(a0),-(sp)
 	bsr.w	MoveSpikes
 	moveq	#0,d1
@@ -111,7 +111,7 @@ Obj36_Sideways:
 	bsr.w	SolidObject
 	swap	d6
 	andi.w	#touch_side_mask,d6	; are Sonic or Tails pushing against the side?
-	beq.s	Obj36_SidewaysEnd	; if not, branch
+	beq.s	ObjSpikes_SidewaysEnd	; if not, branch
 	move.b	d6,d0
 	andi.b	#p1_touch_side,d0	; is Sonic pushing against the side?
 	beq.s	+			; if not, branch
@@ -120,18 +120,18 @@ Obj36_Sideways:
 	bclr	#p1_pushing_bit,status(a0)
 +
 	andi.b	#p2_touch_side,d6	; is Tails pushing against the side?
-	beq.s	Obj36_SidewaysEnd	; if not, branch
+	beq.s	ObjSpikes_SidewaysEnd	; if not, branch
 	lea	(Sidekick).w,a1 ; a1=character
 	bsr.w	Touch_ChkHurt2
 	bclr	#p2_pushing_bit,status(a0)
 
 ; loc_15A3A:
-Obj36_SidewaysEnd:
+ObjSpikes_SidewaysEnd:
 	move.w	spikes_base_x_pos(a0),d0
 	bra.w	MarkObjGone2
 ; ===========================================================================
 ; loc_15A42:
-Obj36_Upsidedown:
+ObjSpikes_Upsidedown:
 	bsr.w	MoveSpikes
 	moveq	#0,d1
 	move.b	width_pixels(a0),d1
@@ -144,7 +144,7 @@ Obj36_Upsidedown:
 	bsr.w	SolidObject
 	swap	d6
 	andi.w	#touch_bottom_mask,d6	; are Sonic or Tails touching the bottom?
-	beq.s	Obj36_UpsidedownEnd	; if not, branch
+	beq.s	ObjSpikes_UpsidedownEnd	; if not, branch
 	move.b	d6,d0
 	andi.b	#p1_touch_bottom,d0	; is Sonic touching the bottom?
 	beq.s	+			; if not, branch
@@ -152,12 +152,12 @@ Obj36_Upsidedown:
 	bsr.w	Touch_ChkHurt2
 +
 	andi.b	#p2_touch_bottom,d6	; is Tails touching the bottom?
-	beq.s	Obj36_UpsidedownEnd	; if not, branch
+	beq.s	ObjSpikes_UpsidedownEnd	; if not, branch
 	lea	(Sidekick).w,a1 ; a1=character
 	bsr.w	Touch_ChkHurt2
 
 ; loc_15A88:
-Obj36_UpsidedownEnd:
+ObjSpikes_UpsidedownEnd:
 	move.w	spikes_base_x_pos(a0),d0
 	bra.w	MarkObjGone2
 
@@ -272,5 +272,5 @@ MoveSpikes_Retract:
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj36_MapUnc_15B68:	include "Objects/Global/Mappings/Spike.map"
+ObjSpikes_MapUnc_15B68:	include "Objects/Global/Mappings/Spike.map"
 

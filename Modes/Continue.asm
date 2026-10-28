@@ -51,11 +51,11 @@ ContinueScreen:
 	clr.b	(Level_started_flag).w
 	clr.l	(Camera_X_pos_copy).w
 	move.l	#$1000000,(Camera_Y_pos_copy).w
-	move.b	#ObjID_ContinueChars,(MainCharacter+id).w ; load ObjDB (Sonic on continue screen)
-	move.b	#ObjID_ContinueChars,(Sidekick+id).w ; load ObjDB (Tails on continue screen)
-	move.b	#6,(Sidekick+routine).w ; => ObjDB_Tails_Init
-	move.b	#ObjID_ContinueText,(ContinueText+id).w ; load ObjDA (continue screen text)
-	move.b	#ObjID_ContinueIcons,(ContinueIcons+id).w ; load ObjDA (continue icons)
+	move.b	#ObjID_ContinueChars,(MainCharacter+id).w ; load ObjContinueChars (Sonic on continue screen)
+	move.b	#ObjID_ContinueChars,(Sidekick+id).w ; load ObjContinueChars (Tails on continue screen)
+	move.b	#6,(Sidekick+routine).w ; => ObjContinueChars_Tails_Init
+	move.b	#ObjID_ContinueText,(ContinueText+id).w ; load ObjContinueIcons (continue screen text)
+	move.b	#ObjID_ContinueIcons,(ContinueIcons+id).w ; load ObjContinueIcons (continue icons)
 	move.b	#4,(ContinueIcons+routine).w ; => loc_7AD0
 	jsr	(RunObjects).l
 	jsr	(BuildSprites).l
@@ -163,23 +163,23 @@ ContinueScreen_AdditionalLetters:
 ; Object DA - Continue text
 ; ----------------------------------------------------------------------------
 ; loc_7A68:
-ObjDA: ; (screen-space obj)
+ObjContinueIcons: ; (screen-space obj)
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	ObjDA_Index(pc,d0.w),d1
-	jmp	ObjDA_Index(pc,d1.w)
+	move.w	ObjContinueIcons_Index(pc,d0.w),d1
+	jmp	ObjContinueIcons_Index(pc,d1.w)
 ; ===========================================================================
 ; Obj_DA_subtbl:
-ObjDA_Index:	offsetTable
-		offsetTableEntry.w ObjDA_Init		; 0
+ObjContinueIcons_Index:	offsetTable
+		offsetTableEntry.w ObjContinueIcons_Init		; 0
 		offsetTableEntry.w JmpTo2_DisplaySprite	; 2
 		offsetTableEntry.w loc_7AD0		; 4
 		offsetTableEntry.w loc_7B46		; 6
 ; ===========================================================================
 ; loc_7A7E:
-ObjDA_Init:
+ObjContinueIcons_Init:
 	addq.b	#2,routine(a0)
-	move.l	#ObjDA_MapUnc_7CB6,mappings(a0)
+	move.l	#ObjContinueIcons_MapUnc_7CB6,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_ContinueText,0,1),art_tile(a0)
 	jsrto	JmpTo_Adjust2PArtPointer
 	move.b	#0,render_flags(a0)
@@ -197,14 +197,14 @@ objda_make_x_positions macro
     endm
 
 ; word_7AB2:
-ObjDA_XPositions:
+ObjContinueIcons_XPositions:
 	objda_make_x_positions -10, 10, -30, 30, -50, 50, -70, 70, -90, 90, -110, 110, -130, 130, -150
 
 ; ===========================================================================
 
 loc_7AD0:
 	movea.l	a0,a1
-	lea_	ObjDA_XPositions,a2
+	lea_	ObjContinueIcons_XPositions,a2
 	moveq	#0,d1
 	move.b	(Continue_count).w,d1
 	subq.b	#2,d1
@@ -230,7 +230,7 @@ loc_7AD0:
 	move.w	#spriteScreenPositionYCentered(-32),y_pixel(a1)
 	move.b	#4,mapping_frame(a1)
 	move.b	#6,routine(a1)
-	move.l	#ObjDA_MapUnc_7CB6,mappings(a1)
+	move.l	#ObjContinueIcons_MapUnc_7CB6,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_ContinueText_2,0,1),art_tile(a1)
 	jsrto	JmpTo_Adjust2PArtPointer2
 	move.b	#0,render_flags(a1)
@@ -269,26 +269,26 @@ JmpTo2_DeleteObject ; JmpTo
 ; Object DB - Sonic lying down or Tails nagging (on the continue screen)
 ; ----------------------------------------------------------------------------
 ; Sprite_7B82:
-ObjDB:
+ObjContinueChars:
 	; a0=character
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	ObjDB_Index(pc,d0.w),d1
-	jsr	ObjDB_Index(pc,d1.w)
+	move.w	ObjContinueChars_Index(pc,d0.w),d1
+	jsr	ObjContinueChars_Index(pc,d1.w)
 	jmp	(DisplaySprite).l
 ; ===========================================================================
-; off_7B96: ObjDB_States:
-ObjDB_Index:	offsetTable
-		offsetTableEntry.w ObjDB_Sonic_Init	;  0
-		offsetTableEntry.w ObjDB_Sonic_Wait	;  2
-		offsetTableEntry.w ObjDB_Sonic_Run	;  4
-		offsetTableEntry.w ObjDB_Tails_Init	;  6
-		offsetTableEntry.w ObjDB_Tails_Wait	;  8
-		offsetTableEntry.w ObjDB_Tails_Run	; $A
+; off_7B96: ObjContinueChars_States:
+ObjContinueChars_Index:	offsetTable
+		offsetTableEntry.w ObjContinueChars_Sonic_Init	;  0
+		offsetTableEntry.w ObjContinueChars_Sonic_Wait	;  2
+		offsetTableEntry.w ObjContinueChars_Sonic_Run	;  4
+		offsetTableEntry.w ObjContinueChars_Tails_Init	;  6
+		offsetTableEntry.w ObjContinueChars_Tails_Wait	;  8
+		offsetTableEntry.w ObjContinueChars_Tails_Run	; $A
 ; ===========================================================================
 ; loc_7BA2:
-ObjDB_Sonic_Init:
-	addq.b	#2,routine(a0) ; => ObjDB_Sonic_Wait
+ObjContinueChars_Sonic_Init:
+	addq.b	#2,routine(a0) ; => ObjContinueChars_Sonic_Wait
 	move.w	#$9C,x_pos(a0)
 	move.w	#$19C,y_pos(a0)
 	move.l	#MapUnc_Sonic,mappings(a0)
@@ -298,22 +298,22 @@ ObjDB_Sonic_Init:
 	move.b	#AniIDSonAni_Lying,anim(a0)
 
 ; loc_7BD2:
-ObjDB_Sonic_Wait:
+ObjContinueChars_Sonic_Wait:
 	tst.b	(Ctrl_1_Press).w	; is start pressed?
-	bmi.s	ObjDB_Sonic_StartRunning ; if yes, branch
+	bmi.s	ObjContinueChars_Sonic_StartRunning ; if yes, branch
 	jsr	(Sonic_Animate).l
 	jmp	(LoadSonicDynPLC).l
 ; ---------------------------------------------------------------------------
 ; loc_7BE4:
-ObjDB_Sonic_StartRunning:
-	addq.b	#2,routine(a0) ; => ObjDB_Sonic_Run
+ObjContinueChars_Sonic_StartRunning:
+	addq.b	#2,routine(a0) ; => ObjContinueChars_Sonic_Run
 	move.b	#AniIDSonAni_LieDown,anim(a0)
 	clr.w	inertia(a0)
 	move.b	#SndID_SpindashRev,d0 ; super peel-out sound
 	bsr.w	PlaySound
 
 ; loc_7BFA:
-ObjDB_Sonic_Run:
+ObjContinueChars_Sonic_Run:
 	cmpi.w	#$800,inertia(a0)
 	bne.s	+
 	move.w	#$1000,x_vel(a0)
@@ -327,26 +327,26 @@ ObjDB_Sonic_Run:
 	jmp	(LoadSonicDynPLC).l
 ; ===========================================================================
 ; loc_7C22:
-ObjDB_Tails_Init:
-	addq.b	#2,routine(a0) ; => ObjDB_Tails_Wait
+ObjContinueChars_Tails_Init:
+	addq.b	#2,routine(a0) ; => ObjContinueChars_Tails_Wait
 	move.w	#$B8,x_pos(a0)
 	move.w	#$1A0,y_pos(a0)
-	move.l	#ObjDA_MapUnc_7CB6,mappings(a0)
+	move.l	#ObjContinueIcons_MapUnc_7CB6,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_ContinueTails,0,0),art_tile(a0)
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#2,priority(a0)
 	move.b	#0,anim(a0) ; This is animation 0 of Ani_objDB, not Tails' usual animation script.
 
 ; loc_7C52:
-ObjDB_Tails_Wait:
+ObjContinueChars_Tails_Wait:
 	tst.b	(Ctrl_1_Press).w	; is start pressed?
-	bmi.s	ObjDB_Tails_StartRunning ; if yes, branch
+	bmi.s	ObjContinueChars_Tails_StartRunning ; if yes, branch
 	lea	(Ani_objDB).l,a1
 	jmp	(AnimateSprite).l
 ; ---------------------------------------------------------------------------
 ; loc_7C64:
-ObjDB_Tails_StartRunning:
-	addq.b	#2,routine(a0) ; => ObjDB_Tails_Run
+ObjContinueChars_Tails_StartRunning:
+	addq.b	#2,routine(a0) ; => ObjContinueChars_Tails_Run
 	move.l	#MapUnc_Tails,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtUnc_Tails,0,0),art_tile(a0)
 	move.b	#AniIDSonAni_Walk,anim(a0)
@@ -355,7 +355,7 @@ ObjDB_Tails_StartRunning:
 	bsr.w	PlaySound
 
 ; loc_7C88:
-ObjDB_Tails_Run:
+ObjContinueChars_Tails_Run:
 	cmpi.w	#$720,inertia(a0)
 	bne.s	+
 	move.w	#$1000,x_vel(a0)
@@ -378,5 +378,5 @@ Ani_objDB:	offsetTable
 ; Sprite mappings for text, countdown, stars, and Tails on the continue screen
 ; Art starts at $A000 in VRAM
 ; -------------------------------------------------------------------------------
-ObjDA_MapUnc_7CB6:	include	"mappings/sprite/objDA.asm"
+ObjContinueIcons_MapUnc_7CB6:	include	"mappings/sprite/objDA.asm"
 

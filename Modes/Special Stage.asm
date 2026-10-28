@@ -89,13 +89,13 @@ SpecialStage:
 	move.l	#0,(Camera_Y_pos_copy).w
 	cmpi.w	#1,(Player_mode).w	; is this a Tails alone game?
 	bgt.s	+			; if yes, branch
-	move.b	#ObjID_SonicSS,(MainCharacter+id).w ; load Obj09 (special stage Sonic)
+	move.b	#ObjID_SonicSS,(MainCharacter+id).w ; load ObjSonicSS (special stage Sonic)
 	tst.w	(Player_mode).w		; is this a Sonic and Tails game?
 	bne.s	++			; if not, branch
-+	move.b	#ObjID_TailsSS,(Sidekick+id).w ; load Obj10 (special stage Tails)
-+	move.b	#ObjID_SSHUD,(SpecialStageHUD+id).w ; load Obj5E (special stage HUD)
-	move.b	#ObjID_StartBanner,(SpecialStageStartBanner+id).w ; load Obj5F (special stage banner)
-	move.b	#ObjID_SSNumberOfRings,(SpecialStageNumberOfRings+id).w ; load Obj87 (special stage ring count)
++	move.b	#ObjID_TailsSS,(Sidekick+id).w ; load ObjTailsSS (special stage Tails)
++	move.b	#ObjID_SSHUD,(SpecialStageHUD+id).w ; load ObjSSHUD (special stage HUD)
+	move.b	#ObjID_StartBanner,(SpecialStageStartBanner+id).w ; load ObjEndingController (special stage banner)
+	move.b	#ObjID_SSNumberOfRings,(SpecialStageNumberOfRings+id).w ; load ObjSSNumberOfRings (special stage ring count)
 	move.w	#$80,(SS_Offset_X).w
 	move.w	#$36,(SS_Offset_Y).w
 	bsr.w	SSPlaneB_Background
@@ -121,7 +121,7 @@ SpecialStage:
 	subq.w	#1,d0
 	bne.s	-
 
-	jsr	(Obj5A_CreateRingsToGoText).l
+	jsr	(ObjSSMessage_CreateRingsToGoText).l
 	bsr.w	SS_ScrollBG
 	jsr	(RunObjects).l
 	jsr	(BuildSprites).l
@@ -258,7 +258,7 @@ SpecialStage:
 	clearRAM Object_Display_Lists,Object_Display_Lists_End
 	clearRAM Object_RAM,Object_RAM_End
 
-	move.b	#ObjID_SSResults,(SpecialStageResults+id).w ; load Obj6F (special stage results) at $FFFFB800
+	move.b	#ObjID_SSResults,(SpecialStageResults+id).w ; load ObjSSResults (special stage results) at $FFFFB800
 -
 	move.b	#VintID_Level,(Vint_routine).w
 	bsr.w	WaitForVint
@@ -2964,7 +2964,7 @@ SSAllocateObjectAfterCurrent:
 ; Object 5E - HUD from Special Stage
 ; ----------------------------------------------------------------------------
 ; Sprite_6FC0:
-Obj5E:
+ObjSSHUD:
 	move.b	routine(a0),d0
     if fixBugs
 	; See below.
@@ -2975,7 +2975,7 @@ Obj5E:
     else
 	bne.w	JmpTo_DisplaySprite
     endif
-	move.l	#Obj5E_MapUnc_7070,mappings(a0)
+	move.l	#ObjSSHUD_MapUnc_7070,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_SpecialHUD,0,0),art_tile(a0)
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
     if ~~fixBugs
@@ -3076,22 +3076,22 @@ SSHUD_SonicTails:
 ; -----------------------------------------------------------------------------------
 ; sprite mappings
 ; -----------------------------------------------------------------------------------
-Obj5E_MapUnc_7070:	include "mappings/sprite/obj5E.asm"
+ObjSSHUD_MapUnc_7070:	include "mappings/sprite/obj5E.asm"
 ; ===========================================================================
 ; ----------------------------------------------------------------------------
 ; Object 5F - Start banner/"Ending controller" from Special Stage
 ; ----------------------------------------------------------------------------
 ; Sprite_70F0:
-Obj5F:
+ObjEndingController:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj5F_Index(pc,d0.w),d1
-	jmp	Obj5F_Index(pc,d1.w)
+	move.w	ObjEndingController_Index(pc,d0.w),d1
+	jmp	ObjEndingController_Index(pc,d1.w)
 ; ===========================================================================
 ; off_70FE:
-Obj5F_Index:	offsetTable
-		offsetTableEntry.w Obj5F_Init	;  0
-		offsetTableEntry.w Obj5F_Main	;  2
+ObjEndingController_Index:	offsetTable
+		offsetTableEntry.w ObjEndingController_Init	;  0
+		offsetTableEntry.w ObjEndingController_Main	;  2
 		offsetTableEntry.w loc_71B4	;  4
 		offsetTableEntry.w loc_710A	;  6
 		offsetTableEntry.w return_723E	;  8
@@ -3123,22 +3123,22 @@ JmpTo_DeleteObject ; JmpTo
 ; ===========================================================================
 
 ; loc_714A:
-Obj5F_Init:
+ObjEndingController_Init:
 	tst.b	(SS_2p_Flag).w
 	beq.s	+
 	move.w	#8,d0
-	jsrto	JmpTo_Obj5A_PrintPhrase
+	jsrto	JmpTo_ObjSSMessage_PrintPhrase
 +	move.w	#$80,x_pos(a0)
 	move.w	#-$40,y_pos(a0)
 	move.w	#$100,y_vel(a0)
-	move.l	#Obj5F_MapUnc_7240,mappings(a0)
+	move.l	#ObjEndingController_MapUnc_7240,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_SpecialStart,0,0),art_tile(a0)
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#1,priority(a0)
 	move.b	#2,routine(a0)
 
 ; loc_718A:
-Obj5F_Main:
+ObjEndingController_Main:
 	jsrto	JmpTo_ObjectMove
 	cmpi.w	#$48,y_pos(a0)
 	blt.w	JmpTo_DisplaySprite
@@ -3162,7 +3162,7 @@ loc_71B4:
     endif
 	moveq	#6,d6
 
-	lea	(Obj5F_MapUnc_7240.frame2).l,a2
+	lea	(ObjEndingController_MapUnc_7240.frame2).l,a2
 
 	moveq	#2,d3
 	move.w	#8,objoff_14(a0)
@@ -3201,10 +3201,10 @@ loc_7218:
 	tst.b	(SS_2p_Flag).w
 	beq.s	+
 	move.w	#$A,d0
-	jsrto	JmpTo_Obj5A_PrintPhrase
+	jsrto	JmpTo_ObjSSMessage_PrintPhrase
 	bra.s	++
 ; ===========================================================================
-+	jsrto	JmpTo_Obj5A_CreateRingReqMessage
++	jsrto	JmpTo_ObjSSMessage_CreateRingReqMessage
 
 +	st.b	(SpecialStage_Started).w
 	jmpto	JmpTo_DeleteObject
@@ -3219,34 +3219,34 @@ return_723E:
 ; ----------------------------------------------------------------------------
 ; sprite mappings
 ; ----------------------------------------------------------------------------
-Obj5F_MapUnc_7240:	include "mappings/sprite/obj5F_a.asm"
+ObjEndingController_MapUnc_7240:	include "mappings/sprite/obj5F_a.asm"
 ; -----------------------------------------------------------------------------------
 ; sprite mappings
 ; -----------------------------------------------------------------------------------
-Obj5F_MapUnc_72D2:	include "mappings/sprite/obj5F_b.asm"
+ObjEndingController_MapUnc_72D2:	include "mappings/sprite/obj5F_b.asm"
 ; ===========================================================================
 ; ----------------------------------------------------------------------------
 ; Object 87 - Number of rings in Special Stage
 ; ----------------------------------------------------------------------------
 ; Sprite_7356:
-Obj87:
+ObjSSNumberOfRings:
 	moveq	#0,d0
 	move.b	objoff_A(a0),d0
-	move.w	Obj87_Index(pc,d0.w),d1
-	jmp	Obj87_Index(pc,d1.w)
+	move.w	ObjSSNumberOfRings_Index(pc,d0.w),d1
+	jmp	ObjSSNumberOfRings_Index(pc,d1.w)
 ; ===========================================================================
 ; off_7364:
-Obj87_Index:	offsetTable
-		offsetTableEntry.w Obj87_Init	; 0
+ObjSSNumberOfRings_Index:	offsetTable
+		offsetTableEntry.w ObjSSNumberOfRings_Init	; 0
 		offsetTableEntry.w loc_7480	; 2
 		offsetTableEntry.w loc_753E	; 4
 		offsetTableEntry.w loc_75DE	; 6
 ; ===========================================================================
 
 ; loc_736C:
-Obj87_Init:
+ObjSSNumberOfRings_Init:
 	move.b	#2,objoff_A(a0)		; => loc_7480
-	move.l	#Obj5F_MapUnc_72D2,mappings(a0)
+	move.l	#ObjEndingController_MapUnc_72D2,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_SpecialHUD,2,0),art_tile(a0)
 	move.b	#1<<render_flags.level_fg,render_flags(a0)
 	bset	#render_flags.multi_sprite,render_flags(a0)
@@ -3277,7 +3277,7 @@ Obj87_Init:
 	bne.s	+	; rts
 	move.b	#ObjID_SSNumberOfRings,id(a1) ; load obj87
 	move.b	#4,objoff_A(a1)		; => loc_753E
-	move.l	#Obj5F_MapUnc_72D2,mappings(a1)
+	move.l	#ObjEndingController_MapUnc_72D2,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_SpecialHUD,2,0),art_tile(a1)
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
 	bset	#render_flags.multi_sprite,render_flags(a1)
@@ -3295,7 +3295,7 @@ Obj87_Init:
 	bne.s	-	; rts
 	move.b	#ObjID_SSNumberOfRings,id(a1) ; load obj87
 	move.b	#6,objoff_A(a1)		; => loc_75DE
-	move.l	#Obj5F_MapUnc_72D2,mappings(a1)
+	move.l	#ObjEndingController_MapUnc_72D2,mappings(a1)
 	move.w	#make_art_tile(ArtTile_ArtNem_SpecialHUD,2,0),art_tile(a1)
 	move.b	#1<<render_flags.level_fg,render_flags(a1)
 	bset	#render_flags.multi_sprite,render_flags(a1)

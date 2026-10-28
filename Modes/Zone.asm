@@ -473,8 +473,8 @@ InitPlayers:
 	move.w	(Player_mode).w,d0
 	bne.s	InitPlayers_Alone ; branch if this isn't a Sonic and Tails game
 
-	move.b	#ObjID_Sonic,(MainCharacter+id).w ; load Obj01 Sonic object at $FFFFB000
-	move.b	#ObjID_SpindashDust,(Sonic_Dust+id).w ; load Obj08 Sonic's spindash dust/splash object at $FFFFD100
+	move.b	#ObjID_Sonic,(MainCharacter+id).w ; load ObjSonic Sonic object at $FFFFB000
+	move.b	#ObjID_SpindashDust,(Sonic_Dust+id).w ; load ObjSplash Sonic's spindash dust/splash object at $FFFFD100
 
 	cmpi.b	#wing_fortress_zone,(Current_Zone).w
 	beq.s	+ ; skip loading Tails if this is WFZ
@@ -483,12 +483,12 @@ InitPlayers:
 	cmpi.b	#sky_chase_zone,(Current_Zone).w
 	beq.s	+ ; skip loading Tails if this is SCZ
 
-	move.b	#ObjID_Tails,(Sidekick+id).w ; load Obj02 Tails object at $FFFFB040
+	move.b	#ObjID_Tails,(Sidekick+id).w ; load ObjTails Tails object at $FFFFB040
 	move.w	(MainCharacter+x_pos).w,(Sidekick+x_pos).w
 	move.w	(MainCharacter+y_pos).w,(Sidekick+y_pos).w
 	subi.w	#$20,(Sidekick+x_pos).w
 	addi_.w	#4,(Sidekick+y_pos).w
-	move.b	#ObjID_SpindashDust,(Tails_Dust+id).w ; load Obj08 Tails' spindash dust/splash object at $FFFFD140
+	move.b	#ObjID_SpindashDust,(Tails_Dust+id).w ; load ObjSplash Tails' spindash dust/splash object at $FFFFD140
 +
 	rts
 ; ===========================================================================
@@ -497,20 +497,20 @@ InitPlayers_Alone: ; either Sonic or Tails but not both
 	subq.w	#1,d0
 	bne.s	InitPlayers_TailsAlone ; branch if this is a Tails alone game
 
-	move.b	#ObjID_Sonic,(MainCharacter+id).w ; load Obj01 Sonic object at $FFFFB000
-	move.b	#ObjID_SpindashDust,(Sonic_Dust+id).w ; load Obj08 Sonic's spindash dust/splash object at $FFFFD100
+	move.b	#ObjID_Sonic,(MainCharacter+id).w ; load ObjSonic Sonic object at $FFFFB000
+	move.b	#ObjID_SpindashDust,(Sonic_Dust+id).w ; load ObjSplash Sonic's spindash dust/splash object at $FFFFD100
 	rts
 ; ===========================================================================
 ; loc_44D0:
 InitPlayers_TailsAlone:
-	move.b	#ObjID_Tails,(MainCharacter+id).w ; load Obj02 Tails object at $FFFFB000
-	move.b	#ObjID_SpindashDust,(Tails_Dust+id).w ; load Obj08 Tails' spindash dust/splash object at $FFFFD100
+	move.b	#ObjID_Tails,(MainCharacter+id).w ; load ObjTails Tails object at $FFFFB000
+	move.b	#ObjID_SpindashDust,(Tails_Dust+id).w ; load ObjSplash Tails' spindash dust/splash object at $FFFFD100
 	addi_.w	#4,(MainCharacter+y_pos).w
 	rts
 ; End of function InitPlayers
 
-	include "Libraries/Water Features.asm"
-	include "Libraries/Demo Player.asm"
+	include "Routines/Water Features.asm"
+	include "Routines/Demo Player.asm"
 ; ||||||||||||||| S U B R O U T I N E |||||||||||||||||||||||||||||||||||||||
 
 ; sub_49BC:
@@ -587,7 +587,7 @@ Off_ColS: zoneOrderedTable 4,1
 ; ---------------------------------------------------------------------------
 ; Oscillating number subroutine
 ; ---------------------------------------------------------------------------
-	include "Libraries/Oscillatory Routines.asm"
+	include "Routines/Oscillatory Routines.asm"
 
 ; ---------------------------------------------------------------------------
 ; Subroutine to change global object animation variables (like rings)

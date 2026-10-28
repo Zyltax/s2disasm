@@ -3,15 +3,15 @@
 ; Object 24 - Bubbles in Aquatic Ruin Zone
 ; ----------------------------------------------------------------------------
 ; Sprite_1F8A8:
-Obj24:
+ObjARZBubbles:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj24_Index(pc,d0.w),d1
-	jmp	Obj24_Index(pc,d1.w)
+	move.w	ObjARZBubbles_Index(pc,d0.w),d1
+	jmp	ObjARZBubbles_Index(pc,d1.w)
 ; ===========================================================================
 ; off_1F8B6:
-Obj24_Index:	offsetTable
-		offsetTableEntry.w Obj24_Init				;  0
+ObjARZBubbles_Index:	offsetTable
+		offsetTableEntry.w ObjARZBubbles_Init				;  0
 		offsetTableEntry.w loc_1F924				;  2
 		offsetTableEntry.w loc_1F93E				;  4
 		offsetTableEntry.w loc_1F99E				;  6
@@ -19,9 +19,9 @@ Obj24_Index:	offsetTable
 		offsetTableEntry.w loc_1F9C0				; $A
 ; ===========================================================================
 ; loc_1F8C2:
-Obj24_Init:
+ObjARZBubbles_Init:
 	addq.b	#2,routine(a0)
-	move.l	#Obj24_MapUnc_1FBF6,mappings(a0)
+	move.l	#ObjARZBubbles_MapUnc_1FBF6,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_BigBubbles,0,1),art_tile(a0)
 	jsrto	JmpTo6_Adjust2PArtPointer
 	move.b	#1<<render_flags.on_screen|1<<render_flags.level_fg,render_flags(a0)
@@ -65,7 +65,7 @@ loc_1F956:
 	move.b	angle(a0),d0
 	addq.b	#1,angle(a0)
 	andi.w	#$7F,d0
-	lea	(Obj0A_WobbleData).l,a1
+	lea	(ObjSmallBubbles_WobbleData).l,a1
 	move.b	(a1,d0.w),d0
 	ext.w	d0
 	add.w	objoff_30(a0),d0
@@ -314,7 +314,7 @@ byte_1FBF2:	dc.b  $F, $E, $F,$FF
 ; -------------------------------------------------------------------------------
 ; sprite mappings
 ; -------------------------------------------------------------------------------
-Obj24_MapUnc_1FBF6:	mappingsTable
+ObjARZBubbles_MapUnc_1FBF6:	mappingsTable
 	mappingsTableEntry.w	word_1FC3A
 	mappingsTableEntry.w	word_1FC44
 	mappingsTableEntry.w	word_1FC44
@@ -336,7 +336,7 @@ Obj24_MapUnc_1FBF6:	mappingsTable
 ; sprite mappings
 ; merged with the above mappings, can't split to file in a useful way...
 ; -------------------------------------------------------------------------------
-Obj24_MapUnc_1FC18:	mappingsTable
+ObjARZBubbles_MapUnc_1FC18:	mappingsTable
 	mappingsTableEntry.w	word_1FC3A
 	mappingsTableEntry.w	word_1FC44
 	mappingsTableEntry.w	word_1FC44

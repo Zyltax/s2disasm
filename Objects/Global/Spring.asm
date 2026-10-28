@@ -3,26 +3,26 @@
 ; Object 41 - Spring
 ; ----------------------------------------------------------------------------
 ; Sprite_18888:
-Obj41:
+ObjSpring:
 	moveq	#0,d0
 	move.b	routine(a0),d0
-	move.w	Obj41_Index(pc,d0.w),d1
-	jsr	Obj41_Index(pc,d1.w)
+	move.w	ObjSpring_Index(pc,d0.w),d1
+	jsr	ObjSpring_Index(pc,d1.w)
 	jmp	(MarkObjGone).l
 ; ===========================================================================
 ; off_1889C:
-Obj41_Index:	offsetTable
-		offsetTableEntry.w Obj41_Init		;  0
-		offsetTableEntry.w Obj41_Up		;  2
-		offsetTableEntry.w Obj41_Horizontal	;  4
-		offsetTableEntry.w Obj41_Down		;  6
-		offsetTableEntry.w Obj41_DiagonallyUp	;  8
-		offsetTableEntry.w Obj41_DiagonallyDown	; $A
+ObjSpring_Index:	offsetTable
+		offsetTableEntry.w ObjSpring_Init		;  0
+		offsetTableEntry.w ObjSpring_Up		;  2
+		offsetTableEntry.w ObjSpring_Horizontal	;  4
+		offsetTableEntry.w ObjSpring_Down		;  6
+		offsetTableEntry.w ObjSpring_DiagonallyUp	;  8
+		offsetTableEntry.w ObjSpring_DiagonallyDown	; $A
 ; ===========================================================================
 ; loc_188A8:
-Obj41_Init:
+ObjSpring_Init:
 	addq.b	#2,routine(a0)
-	move.l	#Obj41_MapUnc_1901C,mappings(a0)
+	move.l	#ObjSpring_MapUnc_1901C,mappings(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_VrtclSprng,0,0),art_tile(a0)
 	ori.b	#1<<render_flags.level_fg,render_flags(a0)
 	move.b	#$10,width_pixels(a0)
@@ -30,71 +30,71 @@ Obj41_Init:
 	move.b	subtype(a0),d0
 	lsr.w	#3,d0
 	andi.w	#$E,d0
-	move.w	Obj41_Init_Subtypes(pc,d0.w),d0
-	jmp	Obj41_Init_Subtypes(pc,d0.w)
+	move.w	ObjSpring_Init_Subtypes(pc,d0.w),d0
+	jmp	ObjSpring_Init_Subtypes(pc,d0.w)
 ; ===========================================================================
 ; off_188DE:
-Obj41_Init_Subtypes: offsetTable
-	offsetTableEntry.w Obj41_Init_Up		; 0
-	offsetTableEntry.w Obj41_Init_Horizontal	; 2
-	offsetTableEntry.w Obj41_Init_Down		; 4
-	offsetTableEntry.w Obj41_Init_DiagonallyUp	; 6
-	offsetTableEntry.w Obj41_Init_DiagonallyDown	; 8
+ObjSpring_Init_Subtypes: offsetTable
+	offsetTableEntry.w ObjSpring_Init_Up		; 0
+	offsetTableEntry.w ObjSpring_Init_Horizontal	; 2
+	offsetTableEntry.w ObjSpring_Init_Down		; 4
+	offsetTableEntry.w ObjSpring_Init_DiagonallyUp	; 6
+	offsetTableEntry.w ObjSpring_Init_DiagonallyDown	; 8
 ; ===========================================================================
 ; loc_188E8:
-Obj41_Init_Horizontal:
+ObjSpring_Init_Horizontal:
 	move.b	#4,routine(a0)
 	move.b	#2,anim(a0)
 	move.b	#3,mapping_frame(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_HrzntlSprng,0,0),art_tile(a0)
 	move.b	#8,width_pixels(a0)
-	bra.s	Obj41_Init_Common
+	bra.s	ObjSpring_Init_Common
 ; ===========================================================================
 ; loc_18908:
-Obj41_Init_Down:
+ObjSpring_Init_Down:
 	move.b	#6,routine(a0)
 	move.b	#6,mapping_frame(a0)
 	bset	#status.npc.y_flip,status(a0)
-	bra.s	Obj41_Init_Common
+	bra.s	ObjSpring_Init_Common
 ; ===========================================================================
 ; loc_1891C:
-Obj41_Init_DiagonallyUp:
+ObjSpring_Init_DiagonallyUp:
 	move.b	#8,routine(a0)
 	move.b	#4,anim(a0)
 	move.b	#7,mapping_frame(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_DignlSprng,0,0),art_tile(a0)
-	bra.s	Obj41_Init_Common
+	bra.s	ObjSpring_Init_Common
 ; ===========================================================================
 ; loc_18936:
-Obj41_Init_DiagonallyDown:
+ObjSpring_Init_DiagonallyDown:
 	move.b	#$A,routine(a0)
 	move.b	#4,anim(a0)
 	move.b	#$A,mapping_frame(a0)
 	move.w	#make_art_tile(ArtTile_ArtNem_DignlSprng,0,0),art_tile(a0)
 	bset	#status.npc.y_flip,status(a0)
 ; loc_18954:
-Obj41_Init_Up:
-Obj41_Init_Common:
+ObjSpring_Init_Up:
+ObjSpring_Init_Common:
 	; checks color of spring
 	move.b	subtype(a0),d0
 	andi.w	#2,d0
-	move.w	Obj41_Strengths(pc,d0.w),objoff_30(a0)
+	move.w	ObjSpring_Strengths(pc,d0.w),objoff_30(a0)
 	btst	#1,d0
 	beq.s	+
 	bset	#palette_bit_0,art_tile(a0)
-	move.l	#Obj41_MapUnc_19032,mappings(a0)
+	move.l	#ObjSpring_MapUnc_19032,mappings(a0)
 +
 	bsr.w	Adjust2PArtPointer
 	rts
 ; ===========================================================================
 ; word_1897C:
-Obj41_Strengths:
+ObjSpring_Strengths:
 	; Speed applied on Sonic
 	dc.w -$1000
 	dc.w  -$A00
 ; ===========================================================================
 ; loc_18980:
-Obj41_Up:
+ObjSpring_Up:
 	move.w	#$1B,d1
 	move.w	#8,d2
 	move.w	#$10,d3
@@ -169,7 +169,7 @@ loc_18A66:
 	jmp	(PlaySound).l
 ; ===========================================================================
 ; loc_18A70:
-Obj41_Horizontal:
+ObjSpring_Horizontal:
 	move.w	#$13,d1
 	move.w	#$E,d2
 	move.w	#$F,d3
@@ -346,7 +346,7 @@ return_18C7E:
 	rts
 ; ===========================================================================
 ; loc_18C80:
-Obj41_Down:
+ObjSpring_Down:
 	move.w	#$1B,d1
 	move.w	#8,d2
 	move.w	#$10,d3
@@ -421,11 +421,11 @@ loc_18D4E:
 	jmp	(PlaySound).l
 ; ===========================================================================
 ; loc_18D6A:
-Obj41_DiagonallyUp:
+ObjSpring_DiagonallyUp:
 	move.w	#$1B,d1
 	move.w	#$10,d2
 	move.w	x_pos(a0),d4
-	lea	Obj41_SlopeData_DiagUp(pc),a2
+	lea	ObjSpring_SlopeData_DiagUp(pc),a2
 	lea	(MainCharacter).w,a1 ; a1=character
 	moveq	#p1_standing_bit,d6
 	movem.l	d1-d4,-(sp)
@@ -520,11 +520,11 @@ loc_18E94:
 	jmp	(PlaySound).l
 ; ===========================================================================
 ; loc_18E9E:
-Obj41_DiagonallyDown:
+ObjSpring_DiagonallyDown:
 	move.w	#$1B,d1
 	move.w	#$10,d2
 	move.w	x_pos(a0),d4
-	lea	Obj41_SlopeData_DiagDown(pc),a2
+	lea	ObjSpring_SlopeData_DiagDown(pc),a2
 	lea	(MainCharacter).w,a1 ; a1=character
 	moveq	#p1_standing_bit,d6
 	movem.l	d1-d4,-(sp)
@@ -603,11 +603,11 @@ loc_18FA0:
 	jmp	(PlaySound).l
 ; ===========================================================================
 ;byte_18FAA:
-Obj41_SlopeData_DiagUp:
+ObjSpring_SlopeData_DiagUp:
 	dc.b $10,$10,$10,$10,$10,$10,$10,$10,$10,$10,$10,$10, $E, $C, $A,  8
 	dc.b   6,  4,  2,  0,$FE,$FC,$FC,$FC,$FC,$FC,$FC,$FC; 16
 ;byte_18FC6:
-Obj41_SlopeData_DiagDown:
+ObjSpring_SlopeData_DiagDown:
 	dc.b $F4,$F0,$F0,$F0,$F0,$F0,$F0,$F0,$F0,$F0,$F0,$F0,$F2,$F4,$F6,$F8
 	dc.b $FA,$FC,$FE,  0,  2,  4,  4,  4,  4,  4,  4,  4; 16
 	even
